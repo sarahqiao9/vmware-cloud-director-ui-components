@@ -8,7 +8,7 @@ import { LOCALE_ID, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ComponentsModule } from '@vmw/vcd-ui-components';
+import { DataExporterModule } from '@vmw/vcd-ui-components';
 import { DocLibModule } from '@vmw/vcd-ui-doc-lib';
 import { ClarityModule } from '@clr/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 
 import localeFr from '@angular/common/locales/fr';
 import localeEs from '@angular/common/locales/es';
+import { DatagridModule } from '@vmw/vcd-ui-components';
 
 registerLocaleData(localeFr, 'fr');
 registerLocaleData(localeEs, 'es');
@@ -44,7 +45,11 @@ function getSupportedLocale(): string {
     imports: [
         BrowserModule,
         AppRoutingModule,
-        ComponentsModule,
+        DataExporterModule,
+        DocLibModule,
+        ClarityModule,
+        BrowserAnimationsModule,
+        DatagridModule,
         DocLibModule,
         ClarityModule,
         BrowserAnimationsModule,

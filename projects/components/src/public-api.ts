@@ -7,6 +7,6 @@
  * Public API Surface of components
  */
 
-export * from './lib/components.service';
-export * from './lib/components.component';
-export * from './lib/components.module';
+export * from './data-exporter/data-exporter.component';
+export * from './data-exporter/data-exporter.module';
+export * from './datagrid/datagrid.module';
