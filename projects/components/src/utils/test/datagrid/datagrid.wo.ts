@@ -11,7 +11,7 @@ const ROW_TAG = 'clr-dg-row';
 const CELL_TAG = 'clr-dg-cell';
 const COLUMN_CSS_SELECTOR = '.datagrid-column';
 
-export class DatagridWidgetObject extends WidgetObject<ClrDatagrid> {
+export class ClrDatagridWidgetObject extends WidgetObject<ClrDatagrid> {
     static tagName = `clr-datagrid`;
 
     private getCell(row: number, column: number): Element {
@@ -22,16 +22,17 @@ export class DatagridWidgetObject extends WidgetObject<ClrDatagrid> {
         return this.getText(this.getCell(row, column));
     }
 
+    isCellHavingStrongElement(row: number, column: number): boolean {
+        const cellElement = this.getCell(row, column);
+        return !!cellElement.querySelector('strong');
+    }
+
     private get columns(): DebugElement[] {
         return this.findElements(COLUMN_CSS_SELECTOR, this.root);
     }
 
     get columnCount(): number {
         return this.component.columns ? this.component.columns.length : this.columns.length;
-    }
-
-    getColumnHeader(columnIndex: number): string {
-        return this.getText(this.columns[columnIndex]);
     }
 
     get columnHeaders(): string[] {

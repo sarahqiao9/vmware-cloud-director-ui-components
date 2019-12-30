@@ -40,7 +40,7 @@ export interface GridDataFetchResult<R> {
     /**
      * Items to be listed in the grid
      */
-    items?: R[];
+    items: R[];
     /**
      * Total number of items
      */
@@ -204,7 +204,7 @@ export class DatagridComponent<R> implements OnInit {
      * {@link #GridState} is the type of value emitted
      */
     @Output()
-    gridRefresh: EventEmitter<null> = new EventEmitter<null>();
+    gridRefresh: EventEmitter<GridState<R>> = new EventEmitter<GridState<R>>();
 
     @ViewChild(ClrDatagridFilter, { static: false }) numericFilter: ClrDatagridFilter;
 
