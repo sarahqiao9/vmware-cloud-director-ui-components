@@ -3,6 +3,12 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+import { GridSelectionType } from './datagrid.component';
+/*!
+ * Copyright 2019 VMware, Inc.
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 import { Component, ViewChild } from '@angular/core';
 import { DatagridComponent, GridDataFetchResult, GridState } from './datagrid.component';
 import { GridColumn, GridColumnHideable } from './interfaces/datagrid-column.interface';
@@ -131,6 +137,34 @@ describe('DatagridComponent', () => {
                     'Expected a different new class to display for the second row.'
                 );
             });
+
+            it('has multi selection capabilities when set to multi', function(this: HasFinderAndGrid): void {
+                this.finder.hostComponent.selectionType = GridSelectionType.Multi;
+                let rowsEmitted = 0;
+                this.finder.hostComponent.selectionChanged = (selection: MockRecord[]) =>
+                    (rowsEmitted = selection.length);
+                this.finder.detectChanges();
+                expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.Multi);
+                this.clrGridWidget.selectRow(1);
+                expect(rowsEmitted).toBe(1);
+            });
+
+            it('has single selection capabilities when set to single', function(this: HasFinderAndGrid): void {
+                this.finder.hostComponent.selectionType = GridSelectionType.Single;
+                let rowsEmitted = 0;
+                this.finder.hostComponent.selectionChanged = (selection: MockRecord[]) =>
+                    (rowsEmitted = selection.length);
+                this.finder.detectChanges();
+                expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.Single);
+                this.clrGridWidget.selectRow(1);
+                expect(rowsEmitted).toBe(1);
+            });
+
+            it('has none selection capabilities when set to none', function(this: HasFinderAndGrid): void {
+                this.finder.hostComponent.selectionType = GridSelectionType.None;
+                this.finder.detectChanges();
+                expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.None);
+            });
         });
 
         it('displays loading indicators while data is loading', function(this: HasFinderAndGrid): void {
@@ -253,6 +287,8 @@ describe('DatagridComponent', () => {
             [columns]="columns"
             [clrDatagridCssClass]="clrDatagridCssClass"
             [clrDatarowCssClassGetter]="clrDatarowCssClassGetter"
+            [selectionType]="selectionType"
+            (selectionChanged)="selectionChanged($event)"
         ></vcd-datagrid>
     `,
 })
@@ -270,6 +306,10 @@ export class HostWithDatagridComponent {
     columns: GridColumn<MockRecord>[] = [];
 
     clrDatagridCssClass = '';
+
+    selectionType = GridSelectionType.None;
+
+    selectionChanged(seletion: MockRecord[]): void {}
 
     clrDatarowCssClassGetter(a: MockRecord, index: number): string {
         return '';

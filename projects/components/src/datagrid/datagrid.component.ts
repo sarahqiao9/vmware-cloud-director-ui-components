@@ -120,7 +120,7 @@ export class DatagridComponent<R> implements OnInit {
     /**
      * Type of row selection on the grid
      */
-    selectionType: GridSelectionType.None;
+    @Input() selectionType: GridSelectionType = GridSelectionType.None;
 
     /**
      * The CSS class to use for the Clarity datagrid.
@@ -131,7 +131,7 @@ export class DatagridComponent<R> implements OnInit {
      * Fired whenever the selection changes. The event data is array of rows selected. The array will contain only one
      * element in case of single selection
      */
-    selectionChanged: EventEmitter<R[]>;
+    @Output() selectionChanged = new EventEmitter<R[]>();
 
     /**
      * Buttons to display in the toolbar on top of data grid
@@ -230,7 +230,6 @@ export class DatagridComponent<R> implements OnInit {
     isColumnHideable(column: GridColumn<R>): boolean {
         return column && column.hideable && column.hideable !== GridColumnHideable.Never;
     }
-
     /**
      * Defines the {@property columnsConfig} by adding extra property required for differentiating different kinds
      * of renderers which is required in the HTML template.

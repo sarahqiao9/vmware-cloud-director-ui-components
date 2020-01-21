@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+import { RowSelectDatagridExampleComponent } from './row-select-datagrid.example.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
@@ -33,6 +34,11 @@ Documentation.registerDocumentationEntry({
             forComponent: null,
             title: 'Show/Hide datagrid columns example',
         },
+        {
+            component: RowSelectDatagridExampleComponent,
+            forComponent: null,
+            title: 'Select datagrid row example',
+        },
     ],
 });
 
@@ -40,6 +46,7 @@ const declarations = [
     ShowHideDatagridExampleComponent,
     CssClassesDatagridExampleComponent,
     ThreeRenderersDatagridExampleComponent,
+    RowSelectDatagridExampleComponent,
 ];
 
 /**

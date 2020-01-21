@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+import { ComponentGridSelectionDirective } from './directives/select-directive';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
@@ -13,7 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FunctionRendererPipe } from './pipes/function-renderer.pipe';
 import { BoldTextRendererComponent } from './renderers/bold-text-renderer.component';
 
-const directives = [DatagridComponent, ComponentRendererOutletDirective];
+const directives = [DatagridComponent, ComponentRendererOutletDirective, ComponentGridSelectionDirective];
 const pipes = [FunctionRendererPipe];
 const renderers = [BoldTextRendererComponent];
 

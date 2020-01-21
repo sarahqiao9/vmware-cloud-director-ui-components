@@ -3,6 +3,12 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+import { GridSelectionType } from './../../../datagrid/datagrid.component';
+/*!
+ * Copyright 2019 VMware, Inc.
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 import { WidgetObject } from '../widget-object';
 import { DebugElement } from '@angular/core';
 import { ClrDatagrid } from '@clr/angular';
@@ -67,7 +73,6 @@ export class ClrDatagridWidgetObject extends WidgetObject<ClrDatagrid> {
      * Returns the CSS class of the Clarity datagrid.
      */
     get gridCssClass(): string[] {
-        console.log(this.root.classes);
         return Object.keys(this.root.classes);
     }
 
@@ -76,6 +81,26 @@ export class ClrDatagridWidgetObject extends WidgetObject<ClrDatagrid> {
      */
     getRowsCssClass(index: number): string[] {
         return Object.keys(this.rows[index].classes);
+    }
+
+    /**
+     * Returns the selection type of the grid.
+     */
+    getSelectionType(): GridSelectionType {
+        if (this.findElements('clr-checkbox-wrapper').length !== 0) {
+            return GridSelectionType.Multi;
+        } else if (this.findElements('clr-radio-wrapper').length !== 0) {
+            return GridSelectionType.Single;
+        } else {
+            return GridSelectionType.None;
+        }
+    }
+
+    /**
+     * Clicks the selection icon on the given row.
+     */
+    selectRow(row: number): void {
+        this.click(`clr-dg-row input`);
     }
 
     /**
