@@ -262,11 +262,11 @@ export class DatagridComponent<R> implements OnInit {
     getDatagridSelection(): R[] {
         if (this.datagrid.selection.currentSingle !== undefined) {
             return [this.datagrid.selection.currentSingle];
-        } else if (this.datagrid.selection.current !== undefined) {
-            return this.datagrid.selection.current;
-        } else {
-            return [];
         }
+        if (this.datagrid.selection.current !== undefined) {
+            return this.datagrid.selection.current;
+        }
+        return [];
     }
 
     isColumnHideable(column: GridColumn<R>): boolean {
