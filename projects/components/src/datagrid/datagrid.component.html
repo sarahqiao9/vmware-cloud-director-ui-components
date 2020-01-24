@@ -1,10 +1,4 @@
-<clr-datagrid
-    [clrDgLoading]="isLoading"
-    [ngClass]="this.clrDatagridCssClass"
-    vcdComponentGridSelection
-    [gridSelectionType]="selectionType"
-    [gridSelectionChanged]="this.selectionChanged"
->
+<clr-datagrid [clrDgLoading]="isLoading" [ngClass]="this.clrDatagridCssClass">
     <clr-dg-column *ngFor="let column of columnsConfig">
         <ng-container *ngIf="isColumnHideable(column); else notHideable">
             <ng-container *clrDgHideableColumn="{ hidden: column.hideable === GridColumnHideable.Hidden }">{{

@@ -2,13 +2,7 @@
  * Copyright 2019 VMware, Inc.
  * SPDX-License-Identifier: BSD-2-Clause
  */
-
 import { GridSelectionType } from './datagrid.component';
-/*!
- * Copyright 2019 VMware, Inc.
- * SPDX-License-Identifier: BSD-2-Clause
- */
-
 import { Component, ViewChild } from '@angular/core';
 import { DatagridComponent, GridDataFetchResult, GridState } from './datagrid.component';
 import { GridColumn, GridColumnHideable } from './interfaces/datagrid-column.interface';
@@ -140,24 +134,22 @@ describe('DatagridComponent', () => {
 
             it('has multi selection capabilities when set to multi', function(this: HasFinderAndGrid): void {
                 this.finder.hostComponent.selectionType = GridSelectionType.Multi;
-                let rowsEmitted = 0;
-                this.finder.hostComponent.selectionChanged = (selection: MockRecord[]) =>
-                    (rowsEmitted = selection.length);
                 this.finder.detectChanges();
                 expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.Multi);
+                this.clrGridWidget.selectRow(0);
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
                 this.clrGridWidget.selectRow(1);
-                expect(rowsEmitted).toBe(1);
+                expect(this.finder.hostComponent.getSelection()).toEqual(mockData);
             });
 
             it('has single selection capabilities when set to single', function(this: HasFinderAndGrid): void {
                 this.finder.hostComponent.selectionType = GridSelectionType.Single;
-                let rowsEmitted = 0;
-                this.finder.hostComponent.selectionChanged = (selection: MockRecord[]) =>
-                    (rowsEmitted = selection.length);
                 this.finder.detectChanges();
                 expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.Single);
+                this.clrGridWidget.selectRow(0);
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
                 this.clrGridWidget.selectRow(1);
-                expect(rowsEmitted).toBe(1);
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
             });
 
             it('has none selection capabilities when set to none', function(this: HasFinderAndGrid): void {
@@ -309,11 +301,17 @@ export class HostWithDatagridComponent {
 
     selectionType = GridSelectionType.None;
 
-    selectionChanged(seletion: MockRecord[]): void {}
+    @ViewChild(DatagridComponent, { static: false }) datagrid: DatagridComponent<MockRecord>;
+
+    selectionChanged(selection: MockRecord[]): void {}
 
     clrDatarowCssClassGetter(a: MockRecord, index: number): string {
         return '';
     }
 
     refresh(eventData: GridState<MockRecord>): void {}
+
+    getSelection(): MockRecord[] {
+        return this.datagrid.getDatagridSelection();
+    }
 }

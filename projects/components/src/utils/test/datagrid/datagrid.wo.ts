@@ -100,7 +100,7 @@ export class ClrDatagridWidgetObject extends WidgetObject<ClrDatagrid> {
      * Clicks the selection icon on the given row.
      */
     selectRow(row: number): void {
-        this.click(`clr-dg-row input`);
+        this.click(`#${this.rows[row].attributes['aria-owns']} input`);
     }
 
     /**

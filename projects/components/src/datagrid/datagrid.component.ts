@@ -5,7 +5,7 @@
 
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FunctionRenderer, GridColumn, GridColumnHideable } from './interfaces/datagrid-column.interface';
-import { ClrDatagridFilter } from '@clr/angular';
+import { ClrDatagridFilter, ClrDatagrid } from '@clr/angular';
 import { ComponentRendererSpec } from './interfaces/component-renderer.interface';
 
 /**
@@ -120,18 +120,17 @@ export class DatagridComponent<R> implements OnInit {
     /**
      * Type of row selection on the grid
      */
-    @Input() selectionType: GridSelectionType = GridSelectionType.None;
+    @Input() set selectionType(selectionType: GridSelectionType) {
+        this._selectionType = selectionType;
+        this.updateSeletionInformation();
+    }
+
+    private _selectionType: GridSelectionType = GridSelectionType.None;
 
     /**
      * The CSS class to use for the Clarity datagrid.
      */
     @Input() clrDatagridCssClass = '';
-
-    /**
-     * Fired whenever the selection changes. The event data is array of rows selected. The array will contain only one
-     * element in case of single selection
-     */
-    @Output() selectionChanged = new EventEmitter<R[]>();
 
     /**
      * Buttons to display in the toolbar on top of data grid
@@ -207,6 +206,16 @@ export class DatagridComponent<R> implements OnInit {
     items: R[];
 
     /**
+     * The value of the single selection.
+     */
+    singleSelected: R = null;
+
+    /**
+     * The value of the multi selection.
+     */
+    multiSelection: R[] = [];
+
+    /**
      * Emitted during the initial rendering, and is emitted whenever filtering/sorting/paging params change
      * {@link #GridState} is the type of value emitted
      */
@@ -214,6 +223,8 @@ export class DatagridComponent<R> implements OnInit {
     gridRefresh: EventEmitter<GridState<R>> = new EventEmitter<GridState<R>>();
 
     @ViewChild(ClrDatagridFilter, { static: false }) numericFilter: ClrDatagridFilter;
+
+    @ViewChild(ClrDatagrid, { static: true }) datagrid: ClrDatagrid;
 
     /**
      * Gives the CSS class to use for a given datarow based on its relative index and entity definition.
@@ -225,6 +236,37 @@ export class DatagridComponent<R> implements OnInit {
     ngOnInit(): void {
         this.isLoading = true;
         this.gridRefresh.emit({});
+        this.updateSeletionInformation();
+    }
+
+    updateSeletionInformation(): void {
+        if (!this.datagrid) {
+            return;
+        }
+        if (this._selectionType === GridSelectionType.Single) {
+            this.datagrid.selected = undefined;
+            this.datagrid.singleSelected = this.singleSelected;
+        } else if (this._selectionType === GridSelectionType.Multi) {
+            this.datagrid.singleSelected = undefined;
+            this.datagrid.selected = this.multiSelection;
+        } else if (this._selectionType === GridSelectionType.None) {
+            this.datagrid.selected = [];
+            this.datagrid.singleSelected = undefined;
+            this.datagrid.selected = undefined;
+        }
+    }
+
+    /**
+     * Returns the items selected in the VCD datagrid.
+     */
+    getDatagridSelection(): R[] {
+        if (this.datagrid.selection.currentSingle !== undefined) {
+            return [this.datagrid.selection.currentSingle];
+        } else if (this.datagrid.selection.current !== undefined) {
+            return this.datagrid.selection.current;
+        } else {
+            return [];
+        }
     }
 
     isColumnHideable(column: GridColumn<R>): boolean {

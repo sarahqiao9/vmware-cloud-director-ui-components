@@ -11,11 +11,11 @@ interface Data {
 }
 
 /**
- * A component that holds an example of the css classes per row capability.
+ * A component that holds an example of the grid selection capability.
  */
 @Component({
     selector: 'vcd-datagrid-row-select-example',
-    templateUrl: 'row-select-datagrid.example.component.html',
+    templateUrl: 'datagrid-row-select.example.component.html',
 })
 export class RowSelectDatagridExampleComponent {
     selectionType = GridSelectionType.Multi;
