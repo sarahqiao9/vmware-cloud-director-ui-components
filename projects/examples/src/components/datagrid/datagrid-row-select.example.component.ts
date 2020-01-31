@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 import { GridDataFetchResult, GridState, GridColumn, GridSelectionType } from '@vcd/ui-components';
 
 interface Data {
-    value: string;
+    href: string;
 }
 
 /**
@@ -28,7 +28,7 @@ export class RowSelectDatagridExampleComponent {
     columns: GridColumn<Data>[] = [
         {
             displayName: 'Some Column',
-            renderer: 'value',
+            renderer: 'href',
         },
     ];
 
@@ -38,7 +38,16 @@ export class RowSelectDatagridExampleComponent {
 
     refresh(eventData: GridState<Data>): void {
         this.gridData = {
-            items: [{ value: 'warn' }, { value: 'error' }, { value: 'ok' }, { value: 'ok' }, { value: 'error' }],
+            items: [{ href: 'a' }, { href: 'b' }],
+            totalItems: 2,
+            pageSize: 2,
+            page: 1,
+        };
+    }
+
+    newData(): void {
+        this.gridData = {
+            items: [{ href: 'b' }, { href: 'a' }],
             totalItems: 2,
             pageSize: 2,
             page: 1,

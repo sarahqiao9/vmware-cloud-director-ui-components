@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, TrackByFunction } from '@angular/core';
 import { FunctionRenderer, GridColumn, GridColumnHideable } from './interfaces/datagrid-column.interface';
 import { ClrDatagridFilter, ClrDatagrid } from '@clr/angular';
 import { ComponentRendererSpec } from './interfaces/component-renderer.interface';
@@ -94,8 +94,6 @@ interface ColumnConfigInternal<R, T> extends GridColumn<R> {
     templateUrl: './datagrid.component.html',
 })
 export class DatagridComponent<R> implements OnInit {
-    GridColumnHideable = GridColumnHideable;
-
     /**
      * Sets the configuration of columns on the grid and updates the {@link columnsConfig} array
      */
@@ -107,7 +105,6 @@ export class DatagridComponent<R> implements OnInit {
     get columns(): GridColumn<R>[] {
         return this._columns;
     }
-    private _columns: GridColumn<R>[];
 
     /**
      * Set from the caller component using this grid. The input is set upon fetching data by the caller
@@ -124,6 +121,8 @@ export class DatagridComponent<R> implements OnInit {
         this._selectionType = selectionType;
         this.updateSeletionInformation();
     }
+    GridColumnHideable = GridColumnHideable;
+    private _columns: GridColumn<R>[];
 
     private _selectionType: GridSelectionType = GridSelectionType.None;
 
@@ -225,6 +224,8 @@ export class DatagridComponent<R> implements OnInit {
     @ViewChild(ClrDatagridFilter, { static: false }) numericFilter: ClrDatagridFilter;
 
     @ViewChild(ClrDatagrid, { static: true }) datagrid: ClrDatagrid;
+
+    @Input() trackBy: TrackByFunction<R> = (index, unit) => (unit as any).href;
 
     /**
      * Gives the CSS class to use for a given datarow based on its relative index and entity definition.
