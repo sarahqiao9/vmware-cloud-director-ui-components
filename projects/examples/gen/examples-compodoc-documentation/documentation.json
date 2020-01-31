@@ -3,7 +3,7 @@
     "interfaces": [
         {
             "name": "Data",
-            "id": "interface-Data-9cdece1c442ed28c1b32a2d39fec961e",
+            "id": "interface-Data-2d9c148b6e0f30801fe4f81ce557b596",
             "file": "projects/examples/src/components/datagrid/css-classes-datagrid.example.component.ts",
             "type": "interface",
             "sourceCode": "import { Component } from '@angular/core';\nimport { GridDataFetchResult, GridState, GridColumn } from '@vcd/ui-components';\n\ninterface Data {\n    value: string;\n}\n\n/**\n * A component that holds an example of the css classes per row capability.\n */\n@Component({\n    selector: 'vcd-datagrid-css-classes-example',\n    styleUrls: ['css-classes-datagrid.example.component.scss'],\n    templateUrl: 'css-classes-datagrid.example.component.html',\n})\nexport class CssClassesDatagridExampleComponent {\n    gridData: GridDataFetchResult<Data> = {\n        items: [],\n    };\n\n    columns: GridColumn<Data>[] = [\n        {\n            displayName: 'Some Column',\n            renderer: 'value',\n        },\n    ];\n\n    refresh(eventData: GridState<Data>): void {\n        this.gridData = {\n            items: [{ value: 'warn' }, { value: 'error' }, { value: 'ok' }, { value: 'ok' }, { value: 'error' }],\n            totalItems: 2,\n            pageSize: 2,\n            page: 1,\n        };\n    }\n\n    clrDatarowCssClassGetter(entity: Data, index: number): string {\n        if (entity.value === 'warn') {\n            return 'yellow-row';\n        } else if (entity.value === 'error') {\n            return 'red-row';\n        } else {\n            return '';\n        }\n    }\n}\n",
@@ -22,10 +22,10 @@
         },
         {
             "name": "Data",
-            "id": "interface-Data-1757be57796ed6cbf96ca9f83e9bcefc-1",
-            "file": "projects/examples/src/components/datagrid/show-hide-datagrid.example.component.ts",
+            "id": "interface-Data-6d9b833eadc7ca18db53088ed512ed51-1",
+            "file": "projects/examples/src/components/datagrid/datagrid-link.example.component.ts",
             "type": "interface",
-            "sourceCode": "import { Component } from '@angular/core';\nimport { GridDataFetchResult, GridColumn, GridColumnHideable, GridState } from '@vcd/ui-components';\n\ninterface Data {\n    value: string;\n}\n\n/**\n * A component that holds an example of the show/hide columns capability.\n */\n@Component({\n    selector: 'vcd-datagrid-show-hide-example',\n    styleUrls: ['show-hide-datagrid.example.component.scss'],\n    templateUrl: 'show-hide-datagrid.example.component.html',\n})\nexport class ShowHideDatagridExampleComponent {\n    gridData: GridDataFetchResult<Data> = {\n        items: [],\n    };\n\n    columns: GridColumn<Data>[] = [\n        {\n            displayName: 'Shown Initially',\n            renderer: 'value',\n            hideable: GridColumnHideable.Shown,\n        },\n        {\n            displayName: 'Hidden Initially',\n            renderer: 'value',\n            hideable: GridColumnHideable.Hidden,\n        },\n        {\n            displayName: 'Always Shown',\n            renderer: 'value',\n            hideable: GridColumnHideable.Never,\n        },\n        {\n            displayName: 'Always Shown Way #2',\n            renderer: 'value',\n        },\n    ];\n\n    refresh(eventData: GridState<Data>): void {\n        this.gridData = {\n            items: [{ value: 'a' }, { value: 'b' }],\n            totalItems: 2,\n            pageSize: 2,\n            page: 1,\n        };\n    }\n}\n",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { GridDataFetchResult, GridColumn, GridState, ButtonConfig } from '@vcd/ui-components';\n\ninterface Data {\n    value: string;\n}\n\n/**\n * A component that holds an example of the show/hide columns capability.\n */\n@Component({\n    selector: 'vcd-datagrid-link-example',\n    template: `\n        <vcd-datagrid [gridData]=\"gridData\" (gridRefresh)=\"refresh($event)\" [columns]=\"columns\"\n            [buttonConfig]=\"buttonConfig\"></vcd-datagrid>\n    `,\n})\nexport class DatagridLinkExampleComponent {\n    gridData: GridDataFetchResult<Data> = {\n        items: [],\n    };\n\n    columns: GridColumn<Data>[] = [\n        {\n            displayName: 'Some Value',\n            renderer: 'value',\n        }\n    ];\n\n    buttonConfig: ButtonConfig<Data> = {\n        globalButtons: [{\n            label: 'Add',\n            handler: () => {\n                alert('Adding stuff!');\n            },\n            shouldDisplay: () => true,\n        }],\n        conditionalButtons: [{\n            label: 'Change da Entity',\n            handler: (rec: Data) => {\n                alert('Adding ' + rec.value);\n            },\n            shouldDisplay: (rec: Data) => rec.value === 'a',\n        }]\n    };\n\n    refresh(eventData: GridState<Data>): void {\n        this.gridData = {\n            items: [{ value: 'a' }, { value: 'b' }],\n            totalItems: 2,\n            pageSize: 2,\n            page: 1,\n        };\n    }\n}\n",
             "properties": [
                 {
                     "name": "value",
@@ -43,8 +43,52 @@
             "duplicateName": "Data-1"
         },
         {
+            "name": "Data",
+            "id": "interface-Data-a19438bd260959f4cdc9ecd506d218d2-2",
+            "file": "projects/examples/src/components/datagrid/datagrid-row-select.example.component.ts",
+            "type": "interface",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { GridDataFetchResult, GridState, GridColumn, GridSelectionType } from '@vcd/ui-components';\n\ninterface Data {\n    value: string;\n}\n\n/**\n * A component that holds an example of the grid selection capability.\n */\n@Component({\n    selector: 'vcd-datagrid-row-select-example',\n    templateUrl: 'datagrid-row-select.example.component.html',\n})\nexport class RowSelectDatagridExampleComponent {\n    selectionType = GridSelectionType.Multi;\n    GridSelectionType = GridSelectionType;\n\n    gridData: GridDataFetchResult<Data> = {\n        items: [],\n    };\n\n    columns: GridColumn<Data>[] = [\n        {\n            displayName: 'Some Column',\n            renderer: 'value',\n        },\n    ];\n\n    selectionChanged(selected: Data[]): void {\n        console.log(selected);\n    }\n\n    refresh(eventData: GridState<Data>): void {\n        this.gridData = {\n            items: [{ value: 'warn' }, { value: 'error' }, { value: 'ok' }, { value: 'ok' }, { value: 'error' }],\n            totalItems: 2,\n            pageSize: 2,\n            page: 1,\n        };\n    }\n}\n",
+            "properties": [
+                {
+                    "name": "value",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": [],
+            "isDuplicate": true,
+            "duplicateId": 2,
+            "duplicateName": "Data-2"
+        },
+        {
+            "name": "Data",
+            "id": "interface-Data-fcbc911c54a7637b9b0e65e416b7c3c3-3",
+            "file": "projects/examples/src/components/datagrid/show-hide-datagrid.example.component.ts",
+            "type": "interface",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { GridDataFetchResult, GridColumn, GridColumnHideable, GridState } from '@vcd/ui-components';\n\ninterface Data {\n    value: string;\n}\n\n/**\n * A component that holds an example of the show/hide columns capability.\n */\n@Component({\n    selector: 'vcd-datagrid-show-hide-example',\n    styleUrls: ['show-hide-datagrid.example.component.scss'],\n    templateUrl: 'show-hide-datagrid.example.component.html',\n})\nexport class ShowHideDatagridExampleComponent {\n    gridData: GridDataFetchResult<Data> = {\n        items: [],\n    };\n\n    columns: GridColumn<Data>[] = [\n        {\n            displayName: 'Shown Initially',\n            renderer: 'value',\n            hideable: GridColumnHideable.Shown,\n        },\n        {\n            displayName: 'Hidden Initially',\n            renderer: 'value',\n            hideable: GridColumnHideable.Hidden,\n        },\n        {\n            displayName: 'Always Shown',\n            renderer: 'value',\n            hideable: GridColumnHideable.Never,\n        },\n        {\n            displayName: 'Always Shown Way #2',\n            renderer: 'value',\n        },\n    ];\n\n    refresh(eventData: GridState<Data>): void {\n        this.gridData = {\n            items: [{ value: 'a' }, { value: 'b' }],\n            totalItems: 2,\n            pageSize: 2,\n            page: 1,\n        };\n    }\n}\n",
+            "properties": [
+                {
+                    "name": "value",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": [],
+            "isDuplicate": true,
+            "duplicateId": 3,
+            "duplicateName": "Data-3"
+        },
+        {
             "name": "MockRecord",
-            "id": "interface-MockRecord-b76eb59a9b9a997a0fbbd95b212a7763",
+            "id": "interface-MockRecord-a098b1e20fb349c581c0dc78b5c3db38",
             "file": "projects/examples/src/components/datagrid/3-renderers-datagrid.example.component.ts",
             "type": "interface",
             "sourceCode": "import { Component } from '@angular/core';\nimport {\n    BoldTextRendererComponent,\n    GridColumn,\n    GridDataFetchResult,\n    GridState,\n    RendererSpec,\n} from '@vcd/ui-components';\n\nexport interface MockRecord {\n    name: string;\n    city: string;\n    state: string;\n    details: {\n        gender: string;\n    };\n    age: number;\n}\n\nexport const mockData: MockRecord[] = [\n    {\n        name: 'Person 1',\n        city: 'Palo Alto',\n        state: 'CA',\n        details: {\n            gender: 'Male',\n        },\n        age: 30,\n    },\n    {\n        name: 'Person 2',\n        city: 'Boston',\n        state: 'MA',\n        details: {\n            gender: 'Female',\n        },\n        age: 60,\n    },\n];\n\n@Component({\n    templateUrl: '3-renderers-datagrid.example.component.html',\n})\nexport class ThreeRenderersDatagridExampleComponent {\n    gridData: GridDataFetchResult<MockRecord> = {\n        items: [],\n    };\n\n    columns: GridColumn<MockRecord>[] = [\n        {\n            displayName: 'Component Renderer',\n            renderer: RendererSpec({\n                type: BoldTextRendererComponent,\n                config: record => ({\n                    text: record.name,\n                }),\n            }),\n        },\n\n        {\n            displayName: 'Function Renderer',\n            renderer: (record: MockRecord) => `${record.city}, ${record.state}`,\n        },\n\n        {\n            displayName: 'Default(string) Renderer',\n            renderer: 'details.gender',\n        },\n    ];\n\n    async refresh(eventData: GridState<MockRecord>): Promise<void> {\n        this.gridData = {\n            items: mockData,\n            totalItems: 2,\n            pageSize: 2,\n            page: 1,\n        };\n    }\n}\n",
@@ -91,7 +135,7 @@
         },
         {
             "name": "SideNavEntries",
-            "id": "interface-SideNavEntries-670b74f800a16f11376bdce98168a07f",
+            "id": "interface-SideNavEntries-0324fe740e25e2a2efa389dc07540567",
             "file": "projects/examples/src/app/app.component.ts",
             "type": "interface",
             "sourceCode": "import { Component } from '@angular/core';\nimport { Documentation, DocumentationEntry } from '@vcd/ui-doc-lib';\n\ninterface SideNavEntries {\n    title: string;\n    path: string;\n}\n\n@Component({\n    selector: 'vcd-examples-app',\n    templateUrl: './app.component.html',\n    styleUrls: ['./app.component.scss'],\n})\nexport class AppComponent {\n    /**\n     * Gets the registered documentation entries {@link Documentation.getAllEntries} and sets them on a array to display\n     * on the side navigation\n     */\n    sideNavEntries: SideNavEntries[] = Documentation.getAllEntries().map((entry: DocumentationEntry) => ({\n        title: entry.displayName,\n        path: entry.urlSegment,\n    }));\n}\n",
@@ -122,7 +166,7 @@
     "components": [
         {
             "name": "AppComponent",
-            "id": "component-AppComponent-670b74f800a16f11376bdce98168a07f",
+            "id": "component-AppComponent-0324fe740e25e2a2efa389dc07540567",
             "file": "projects/examples/src/app/app.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -254,7 +298,7 @@
         },
         {
             "name": "CssClassesDatagridExampleComponent",
-            "id": "component-CssClassesDatagridExampleComponent-9cdece1c442ed28c1b32a2d39fec961e",
+            "id": "component-CssClassesDatagridExampleComponent-2d9c148b6e0f30801fe4f81ce557b596",
             "file": "projects/examples/src/components/datagrid/css-classes-datagrid.example.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -365,7 +409,7 @@
         },
         {
             "name": "DataExporterExampleComponent",
-            "id": "component-DataExporterExampleComponent-a8561d836884c515999685d11aeb9a9e",
+            "id": "component-DataExporterExampleComponent-f6ac180071c5db4364e06c0088757ab6",
             "file": "projects/examples/src/components/data-exporter/data-exporter.example.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -435,8 +479,194 @@
             "templateData": "<h2>Data Exporter</h2>\n<button (click)=\"dataExporterOpen = true\">\n    Show Modal\n</button>\n<vcd-data-exporter\n    *ngIf=\"dataExporterOpen\"\n    [(open)]=\"dataExporterOpen\"\n    (dataExportRequest)=\"onExportRequest($event)\"\n    [columns]=\"exportColumns\"\n>\n</vcd-data-exporter>\n"
         },
         {
+            "name": "DatagridLinkExampleComponent",
+            "id": "component-DatagridLinkExampleComponent-6d9b833eadc7ca18db53088ed512ed51",
+            "file": "projects/examples/src/components/datagrid/datagrid-link.example.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "vcd-datagrid-link-example",
+            "styleUrls": [],
+            "styles": [],
+            "template": "<vcd-datagrid [gridData]=\"gridData\" (gridRefresh)=\"refresh($event)\" [columns]=\"columns\"\n    [buttonConfig]=\"buttonConfig\"></vcd-datagrid>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "buttonConfig",
+                    "defaultValue": "{\n        globalButtons: [{\n            label: 'Add',\n            handler: () => {\n                alert('Adding stuff!');\n            },\n            shouldDisplay: () => true,\n        }],\n        conditionalButtons: [{\n            label: 'Change da Entity',\n            handler: (rec: Data) => {\n                alert('Adding ' + rec.value);\n            },\n            shouldDisplay: (rec: Data) => rec.value === 'a',\n        }]\n    }",
+                    "type": "ButtonConfig<Data>",
+                    "optional": false,
+                    "description": "",
+                    "line": 35
+                },
+                {
+                    "name": "columns",
+                    "defaultValue": "[\n        {\n            displayName: 'Some Value',\n            renderer: 'value',\n        }\n    ]",
+                    "type": "GridColumn<Data>[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 28
+                },
+                {
+                    "name": "gridData",
+                    "defaultValue": "{\n        items: [],\n    }",
+                    "type": "GridDataFetchResult<Data>",
+                    "optional": false,
+                    "description": "",
+                    "line": 24
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "refresh",
+                    "args": [
+                        {
+                            "name": "eventData",
+                            "type": "GridState<Data>"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 52,
+                    "jsdoctags": [
+                        {
+                            "name": "eventData",
+                            "type": "GridState<Data>",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "<p>A component that holds an example of the show/hide columns capability.</p>\n",
+            "rawdescription": "A component that holds an example of the show/hide columns capability.",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { GridDataFetchResult, GridColumn, GridState, ButtonConfig } from '@vcd/ui-components';\n\ninterface Data {\n    value: string;\n}\n\n/**\n * A component that holds an example of the show/hide columns capability.\n */\n@Component({\n    selector: 'vcd-datagrid-link-example',\n    template: `\n        <vcd-datagrid [gridData]=\"gridData\" (gridRefresh)=\"refresh($event)\" [columns]=\"columns\"\n            [buttonConfig]=\"buttonConfig\"></vcd-datagrid>\n    `,\n})\nexport class DatagridLinkExampleComponent {\n    gridData: GridDataFetchResult<Data> = {\n        items: [],\n    };\n\n    columns: GridColumn<Data>[] = [\n        {\n            displayName: 'Some Value',\n            renderer: 'value',\n        }\n    ];\n\n    buttonConfig: ButtonConfig<Data> = {\n        globalButtons: [{\n            label: 'Add',\n            handler: () => {\n                alert('Adding stuff!');\n            },\n            shouldDisplay: () => true,\n        }],\n        conditionalButtons: [{\n            label: 'Change da Entity',\n            handler: (rec: Data) => {\n                alert('Adding ' + rec.value);\n            },\n            shouldDisplay: (rec: Data) => rec.value === 'a',\n        }]\n    };\n\n    refresh(eventData: GridState<Data>): void {\n        this.gridData = {\n            items: [{ value: 'a' }, { value: 'b' }],\n            totalItems: 2,\n            pageSize: 2,\n            page: 1,\n        };\n    }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": ""
+        },
+        {
+            "name": "RowSelectDatagridExampleComponent",
+            "id": "component-RowSelectDatagridExampleComponent-a19438bd260959f4cdc9ecd506d218d2",
+            "file": "projects/examples/src/components/datagrid/datagrid-row-select.example.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "vcd-datagrid-row-select-example",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "datagrid-row-select.example.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "columns",
+                    "defaultValue": "[\n        {\n            displayName: 'Some Column',\n            renderer: 'value',\n        },\n    ]",
+                    "type": "GridColumn<Data>[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 28
+                },
+                {
+                    "name": "gridData",
+                    "defaultValue": "{\n        items: [],\n    }",
+                    "type": "GridDataFetchResult<Data>",
+                    "optional": false,
+                    "description": "",
+                    "line": 24
+                },
+                {
+                    "name": "GridSelectionType",
+                    "defaultValue": "GridSelectionType",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 22
+                },
+                {
+                    "name": "selectionType",
+                    "defaultValue": "GridSelectionType.Multi",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 21
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "refresh",
+                    "args": [
+                        {
+                            "name": "eventData",
+                            "type": "GridState<Data>"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 39,
+                    "jsdoctags": [
+                        {
+                            "name": "eventData",
+                            "type": "GridState<Data>",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "selectionChanged",
+                    "args": [
+                        {
+                            "name": "selected",
+                            "type": "Data[]"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 35,
+                    "jsdoctags": [
+                        {
+                            "name": "selected",
+                            "type": "Data[]",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "<p>A component that holds an example of the grid selection capability.</p>\n",
+            "rawdescription": "A component that holds an example of the grid selection capability.",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { GridDataFetchResult, GridState, GridColumn, GridSelectionType } from '@vcd/ui-components';\n\ninterface Data {\n    value: string;\n}\n\n/**\n * A component that holds an example of the grid selection capability.\n */\n@Component({\n    selector: 'vcd-datagrid-row-select-example',\n    templateUrl: 'datagrid-row-select.example.component.html',\n})\nexport class RowSelectDatagridExampleComponent {\n    selectionType = GridSelectionType.Multi;\n    GridSelectionType = GridSelectionType;\n\n    gridData: GridDataFetchResult<Data> = {\n        items: [],\n    };\n\n    columns: GridColumn<Data>[] = [\n        {\n            displayName: 'Some Column',\n            renderer: 'value',\n        },\n    ];\n\n    selectionChanged(selected: Data[]): void {\n        console.log(selected);\n    }\n\n    refresh(eventData: GridState<Data>): void {\n        this.gridData = {\n            items: [{ value: 'warn' }, { value: 'error' }, { value: 'ok' }, { value: 'ok' }, { value: 'error' }],\n            totalItems: 2,\n            pageSize: 2,\n            page: 1,\n        };\n    }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "templateData": "<button class=\"btn btn-primary\" (click)=\"selectionType = GridSelectionType.Single\">Single Select</button>\n<button class=\"btn btn-primary\" (click)=\"selectionType = GridSelectionType.Multi\">Multi Select Select</button>\n<button class=\"btn btn-primary\" (click)=\"selectionType = GridSelectionType.None\">No Select Select</button>\n<vcd-datagrid\n    [gridData]=\"gridData\"\n    (gridRefresh)=\"refresh($event)\"\n    [columns]=\"columns\"\n    [selectionType]=\"selectionType\"\n    (selectionChanged)=\"selectionChanged($event)\"\n></vcd-datagrid>\n"
+        },
+        {
             "name": "ShowHideDatagridExampleComponent",
-            "id": "component-ShowHideDatagridExampleComponent-1757be57796ed6cbf96ca9f83e9bcefc",
+            "id": "component-ShowHideDatagridExampleComponent-fcbc911c54a7637b9b0e65e416b7c3c3",
             "file": "projects/examples/src/components/datagrid/show-hide-datagrid.example.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -514,7 +744,7 @@
         },
         {
             "name": "ThreeRenderersDatagridExampleComponent",
-            "id": "component-ThreeRenderersDatagridExampleComponent-b76eb59a9b9a997a0fbbd95b212a7763",
+            "id": "component-ThreeRenderersDatagridExampleComponent-a098b1e20fb349c581c0dc78b5c3db38",
             "file": "projects/examples/src/components/datagrid/3-renderers-datagrid.example.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -760,6 +990,12 @@
                             "name": "CssClassesDatagridExampleComponent"
                         },
                         {
+                            "name": "DatagridLinkExampleComponent"
+                        },
+                        {
+                            "name": "RowSelectDatagridExampleComponent"
+                        },
+                        {
                             "name": "ShowHideDatagridExampleComponent"
                         },
                         {
@@ -776,6 +1012,12 @@
                     "elements": [
                         {
                             "name": "CssClassesDatagridExampleComponent"
+                        },
+                        {
+                            "name": "DatagridLinkExampleComponent"
+                        },
+                        {
+                            "name": "RowSelectDatagridExampleComponent"
                         },
                         {
                             "name": "ShowHideDatagridExampleComponent"
@@ -804,7 +1046,7 @@
                 "subtype": "variable",
                 "file": "projects/examples/src/components/datagrid/datagrid.example.module.ts",
                 "type": "[]",
-                "defaultValue": "[ShowHideDatagridExampleComponent, CssClassesDatagridExampleComponent, ThreeRenderersDatagridExampleComponent]"
+                "defaultValue": "[\n    ShowHideDatagridExampleComponent,\n    CssClassesDatagridExampleComponent,\n    ThreeRenderersDatagridExampleComponent,\n    RowSelectDatagridExampleComponent,\n    DatagridLinkExampleComponent\n]"
             },
             {
                 "name": "defaultLocale",
@@ -885,7 +1127,7 @@
                     "subtype": "variable",
                     "file": "projects/examples/src/components/datagrid/datagrid.example.module.ts",
                     "type": "[]",
-                    "defaultValue": "[ShowHideDatagridExampleComponent, CssClassesDatagridExampleComponent, ThreeRenderersDatagridExampleComponent]"
+                    "defaultValue": "[\n    ShowHideDatagridExampleComponent,\n    CssClassesDatagridExampleComponent,\n    ThreeRenderersDatagridExampleComponent,\n    RowSelectDatagridExampleComponent,\n    DatagridLinkExampleComponent\n]"
                 }
             ],
             "projects/examples/src/app/app.module.ts": [
@@ -1109,6 +1351,42 @@
             },
             {
                 "filePath": "projects/examples/src/components/datagrid/css-classes-datagrid.example.component.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "Data",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/examples/src/components/datagrid/datagrid-link.example.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DatagridLinkExampleComponent",
+                "coveragePercent": 20,
+                "coverageCount": "1/5",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/examples/src/components/datagrid/datagrid-link.example.component.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "Data",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/examples/src/components/datagrid/datagrid-row-select.example.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "RowSelectDatagridExampleComponent",
+                "coveragePercent": 14,
+                "coverageCount": "1/7",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/examples/src/components/datagrid/datagrid-row-select.example.component.ts",
                 "type": "interface",
                 "linktype": "interface",
                 "name": "Data",

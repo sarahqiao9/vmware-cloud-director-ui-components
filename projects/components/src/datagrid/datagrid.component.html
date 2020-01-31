@@ -1,3 +1,21 @@
+<ng-container *ngIf="buttonConfig">
+    <ng-container *ngFor="let button of buttonConfig.globalButtons">
+        <button class="btn btn-link" *ngIf="button.shouldDisplay()" (click)="button.handler()">
+            {{ button.label }}
+        </button>
+    </ng-container>
+
+    <ng-container *ngFor="let button of buttonConfig.conditionalButtons">
+        <button
+            class="btn btn-link"
+            *ngIf="button.shouldDisplay(getDatagridSelection())"
+            (click)="button.handler(getDatagridSelection())"
+        >
+            {{ button.label }}
+        </button>
+    </ng-container>
+</ng-container>
+
 <clr-datagrid [clrDgLoading]="isLoading" [ngClass]="this.clrDatagridCssClass">
     <clr-dg-column *ngFor="let column of columnsConfig">
         <ng-container *ngIf="isColumnHideable(column); else notHideable">

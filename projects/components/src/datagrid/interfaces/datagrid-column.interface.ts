@@ -41,6 +41,60 @@ export enum GridColumnSortDirection {
 export type FunctionRenderer<T> = (record: T) => string;
 
 /**
+ * A type of button who's displayability does not depend on the selected entity.
+ */
+export interface GlobalButton {
+    /**
+     * The translated text of the button.
+     */
+    label: string;
+    /**
+     * The function that is called when the button is pressed.
+     */
+    handler: () => void;
+    /**
+     * The function that is called to determine if the button should be displayed.
+     */
+    shouldDisplay: () => boolean;
+}
+
+/**
+ * A type of button who's displayability dependends on the selected entity.
+ */
+export interface ConditionalEntityButton<R> {
+    /**
+     * The translated text of the button.
+     */
+    label: string;
+    /**
+     * The function that is called when the button is pressed.
+     *
+     * @param entity the currently selected entities.
+     */
+    handler: (entity: R[]) => void;
+    /**
+     * The function that is called to determine if the button should be displayed.
+     *
+     * @param entity the currently selected entities.
+     */
+    shouldDisplay: (rec: R[]) => boolean;
+}
+
+/**
+ * The configuration object that describes the type of buttons to put on the top of the grid.
+ */
+export interface ButtonConfig<R> {
+    /**
+     * The buttons who's displayability does not depend on the selected entity.
+     */
+    globalButtons: GlobalButton[];
+    /**
+     * The buttons who's displayability depends on the selected entity.
+     */
+    conditionalButtons: ConditionalEntityButton<R>[];
+}
+
+/**
  * Configuration object defined in the caller. This contains properties for the column header (text, filtering,
  * sorting, toggling etc.,) and content for row cells.
  *

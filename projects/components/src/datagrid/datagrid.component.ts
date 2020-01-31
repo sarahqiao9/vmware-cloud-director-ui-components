@@ -4,8 +4,8 @@
  */
 
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, TrackByFunction } from '@angular/core';
-import { FunctionRenderer, GridColumn, GridColumnHideable } from './interfaces/datagrid-column.interface';
 import { ClrDatagridFilter, ClrDatagrid } from '@clr/angular';
+import { FunctionRenderer, GridColumn, GridColumnHideable, ButtonConfig } from './interfaces/datagrid-column.interface';
 import { ComponentRendererSpec } from './interfaces/component-renderer.interface';
 
 /**
@@ -131,6 +131,11 @@ export class DatagridComponent<R> implements OnInit {
      * The CSS class to use for the Clarity datagrid.
      */
     @Input() clrDatagridCssClass = '';
+
+    @Input() buttonConfig: ButtonConfig<R> = {
+        globalButtons: [],
+        conditionalButtons: [],
+    };
 
     /**
      * Buttons to display in the toolbar on top of data grid
