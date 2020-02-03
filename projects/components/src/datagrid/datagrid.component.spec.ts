@@ -22,6 +22,7 @@ export interface MockRecord {
         gender: string;
     };
     age: number;
+    href: string;
 }
 
 export const mockData: MockRecord[] = [
@@ -33,6 +34,7 @@ export const mockData: MockRecord[] = [
             gender: 'Male',
         },
         age: 30,
+        href: '1',
     },
     {
         name: 'Person 2',
@@ -42,6 +44,7 @@ export const mockData: MockRecord[] = [
             gender: 'Female',
         },
         age: 60,
+        href: '2',
     },
 ];
 
@@ -150,6 +153,37 @@ describe('DatagridComponent', () => {
                 expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
                 this.clrGridWidget.selectRow(1);
                 expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+            });
+
+            it('should unselect an item if the item is removed for single selection', function(this: HasFinderAndGrid): void {
+                this.finder.hostComponent.selectionType = GridSelectionType.Single;
+                this.finder.detectChanges();
+                this.clrGridWidget.selectRow(1);
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+                this.finder.hostComponent.gridData = {
+                    items: [mockData[0]],
+                    totalItems: 2,
+                    pageSize: 2,
+                    page: 1,
+                };
+                this.finder.detectChanges();
+                expect(this.finder.hostComponent.getSelection()).toEqual([]);
+            });
+
+            it('should unselect an item if the item is removed for multi selection', function(this: HasFinderAndGrid): void {
+                this.finder.hostComponent.selectionType = GridSelectionType.Multi;
+                this.finder.detectChanges();
+                this.clrGridWidget.selectRow(0);
+                this.clrGridWidget.selectRow(1);
+                expect(this.finder.hostComponent.getSelection()).toEqual(mockData);
+                this.finder.hostComponent.gridData = {
+                    items: [mockData[0]],
+                    totalItems: 2,
+                    pageSize: 2,
+                    page: 1,
+                };
+                this.finder.detectChanges();
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
             });
 
             it('has none selection capabilities when set to none', function(this: HasFinderAndGrid): void {

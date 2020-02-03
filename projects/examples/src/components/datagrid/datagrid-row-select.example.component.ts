@@ -38,7 +38,7 @@ export class RowSelectDatagridExampleComponent {
 
     refresh(eventData: GridState<Data>): void {
         this.gridData = {
-            items: [{ href: 'a' }, { href: 'b' }],
+            items: [{ href: 'a' }, { href: 'b' }, { href: 'c' }],
             totalItems: 2,
             pageSize: 2,
             page: 1,
@@ -47,7 +47,7 @@ export class RowSelectDatagridExampleComponent {
 
     newData(): void {
         this.gridData = {
-            items: [{ href: 'b' }, { href: 'a' }],
+            items: [{ href: 'a' }, { href: 'b' }, { href: 'd' }],
             totalItems: 2,
             pageSize: 2,
             page: 1,
