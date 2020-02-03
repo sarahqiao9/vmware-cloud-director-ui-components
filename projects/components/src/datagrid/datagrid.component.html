@@ -5,15 +5,17 @@
         </button>
     </ng-container>
 
-    <ng-container *ngFor="let button of buttonConfig.conditionalButtons">
-        <button
-            class="btn btn-link"
-            [ngClass]="button.class"
-            *ngIf="button.shouldDisplay(getDatagridSelection())"
-            (click)="button.handler(getDatagridSelection())"
-        >
-            {{ button.label }}
-        </button>
+    <ng-container *ngIf="!buttonConfig.displayWithEntity">
+        <ng-container *ngFor="let button of buttonConfig.conditionalButtons">
+            <button
+                class="btn btn-link"
+                [ngClass]="button.class"
+                *ngIf="button.shouldDisplay(getDatagridSelection())"
+                (click)="button.handler(getDatagridSelection())"
+            >
+                {{ button.label }}
+            </button>
+        </ng-container>
     </ng-container>
 </ng-container>
 
@@ -33,6 +35,18 @@
         [ngClass]="this.clrDatarowCssClassGetter(restItem, i)"
         [clrDgItem]="restItem"
     >
+        <clr-dg-action-overflow *ngIf="buttonConfig.displayWithEntity">
+            <button
+                *ngFor="let button of buttonConfig.conditionalButtons"
+                class="action-item"
+                (click)="button.handler([restItem])"
+                [disabled]="!button.shouldDisplay([restItem])"
+                [ngClass]="button.class"
+            >
+                {{ button.label }}
+            </button>
+        </clr-dg-action-overflow>
+
         <clr-dg-cell *ngFor="let column of columnsConfig">
             <!-- Default renderer -->
             <ng-container *ngIf="column.fieldName">{{ restItem | nestedProperty: column.fieldName }}</ng-container>

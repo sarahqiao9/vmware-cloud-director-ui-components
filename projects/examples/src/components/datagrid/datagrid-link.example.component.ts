@@ -16,6 +16,7 @@ interface Data {
 @Component({
     selector: 'vcd-datagrid-link-example',
     template: `
+        <button (click)="this.changeButtonLocation()">Change Location</button>
         <vcd-datagrid
             [gridData]="gridData"
             (gridRefresh)="refresh($event)"
@@ -56,9 +57,19 @@ export class DatagridLinkExampleComponent {
                 shouldDisplay: (rec: Data[]) => rec.length === 1 && rec[0].value === 'a',
             },
         ],
+        displayWithEntity: false,
     };
 
     selectionType = GridSelectionType.Single;
+
+    changeButtonLocation(): void {
+        this.buttonConfig.displayWithEntity = !this.buttonConfig.displayWithEntity;
+        if (this.buttonConfig.displayWithEntity) {
+            this.selectionType = GridSelectionType.None;
+        } else {
+            this.selectionType = GridSelectionType.Single;
+        }
+    }
 
     refresh(eventData: GridState<Data>): void {
         this.gridData = {

@@ -100,6 +100,10 @@ export interface ButtonConfig<R> {
      * The buttons who's displayability depends on the selected entity.
      */
     conditionalButtons: ConditionalEntityButton<R>[];
+    /**
+     * Whether the conditional buttons appear on the top or next to the entity.
+     */
+    displayWithEntity?: boolean;
 }
 
 /**
