@@ -56,6 +56,10 @@ export interface GlobalButton {
      * The function that is called to determine if the button should be displayed.
      */
     shouldDisplay: () => boolean;
+    /**
+     * The css class the button should have.
+     */
+    class?: string;
 }
 
 /**
@@ -78,6 +82,10 @@ export interface ConditionalEntityButton<R> {
      * @param entity the currently selected entities.
      */
     shouldDisplay: (rec: R[]) => boolean;
+    /**
+     * The css class the button should have.
+     */
+    class?: string;
 }
 
 /**

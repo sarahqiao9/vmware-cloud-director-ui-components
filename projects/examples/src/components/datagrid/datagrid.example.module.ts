@@ -2,7 +2,6 @@
  * Copyright 2019 VMware, Inc.
  * SPDX-License-Identifier: BSD-2-Clause
  */
-
 import { RowSelectDatagridExampleComponent } from './datagrid-row-select.example.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

@@ -1,6 +1,6 @@
 <ng-container *ngIf="buttonConfig">
     <ng-container *ngFor="let button of buttonConfig.globalButtons">
-        <button class="btn btn-link" *ngIf="button.shouldDisplay()" (click)="button.handler()">
+        <button class="btn btn-link" [ngClass]="button.class" *ngIf="button.shouldDisplay()" (click)="button.handler()">
             {{ button.label }}
         </button>
     </ng-container>
@@ -8,6 +8,7 @@
     <ng-container *ngFor="let button of buttonConfig.conditionalButtons">
         <button
             class="btn btn-link"
+            [ngClass]="button.class"
             *ngIf="button.shouldDisplay(getDatagridSelection())"
             (click)="button.handler(getDatagridSelection())"
         >
