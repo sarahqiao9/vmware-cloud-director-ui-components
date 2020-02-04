@@ -16,7 +16,7 @@ interface Data {
 @Component({
     selector: 'vcd-datagrid-link-example',
     template: `
-        <button (click)="this.changeButtonLocation()">Change Location</button>
+        <button (click)="this.changeButtonLocation()" class="btn btn-primary">Change Link Location</button><br />
         <vcd-datagrid
             [gridData]="gridData"
             (gridRefresh)="refresh($event)"

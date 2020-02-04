@@ -17,16 +17,16 @@ export interface LinkedTextRendererConfig {
     /**
      * Where the text should link to
      */
-    onsiteLink: string;
+    textLink: string;
     /**
      * The cross-site link that the text should point to
      */
     // TODO: implement this functionality. See vcdCrossSiteLink.
-    offsiteLink?: string;
+    popoutLink?: string;
     /**
      * The tooltip text of the offiste link.
      */
-    offsiteLinkTooltip?: string;
+    popoutLinkTooltip?: string;
 }
 
 /**
@@ -47,26 +47,41 @@ export interface LinkedTextRendererConfig {
     template: `
         <div class="flex-container">
             <div class="with-margin-right text-truncate">
-                <a [routerLink]="config.onsiteLink">
+                <a [routerLink]="config.textLink">
                     <vcd-cliptext>
                         {{ config.text }}
                     </vcd-cliptext>
                 </a>
             </div>
-            <clr-tooltip class="without-flex" *ngIf="config.offsiteLink">
+            <clr-tooltip class="without-flex" *ngIf="config.popoutLink">
                 <span clrTooltipTrigger>
                     <a [target]="'_blank'">
                         <clr-icon shape="pop-out"></clr-icon>
                     </a>
                 </span>
-                <ng-container *ngIf="config.offsiteLinkTooltip">
+                <ng-container *ngIf="config.popoutLinkTooltip">
                     <clr-tooltip-content *clrIfOpen [clrPosition]="'top-right'" [clrSize]="'md'">
-                        <span>{{ config.offsiteLinkTooltip }}</span>
+                        <span>{{ config.popoutLinkTooltip }}</span>
                     </clr-tooltip-content>
                 </ng-container>
             </clr-tooltip>
         </div>
     `,
+    styles: [
+        `
+            .without-flex {
+                flex: none;
+            }
+
+            .flex-container {
+                display: flex;
+            }
+
+            .with-margin-right {
+                margin-right: auto;
+            }
+        `,
+    ],
 })
 export class LinkedTextRendererComponent implements ComponentRenderer<LinkedTextRendererConfig> {
     @Input()
