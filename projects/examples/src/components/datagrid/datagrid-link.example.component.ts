@@ -4,7 +4,14 @@
  */
 
 import { Component } from '@angular/core';
-import { GridDataFetchResult, GridColumn, GridState, ButtonConfig, GridSelectionType } from '@vcd/ui-components';
+import {
+    GridDataFetchResult,
+    GridColumn,
+    GridState,
+    ButtonConfig,
+    GridSelectionType,
+    ContextualButtonPosition,
+} from '@vcd/ui-components';
 
 interface Data {
     value: string;
@@ -48,25 +55,57 @@ export class DatagridLinkExampleComponent {
                 shouldDisplay: () => true,
             },
         ],
-        conditionalButtons: [
-            {
-                label: 'Change da Entity',
-                handler: (rec: Data[]) => {
-                    console.log('Adding ' + rec[0].value);
+        contextualButtons: {
+            buttons: [
+                {
+                    label: 'Start',
+                    handler: (rec: Data[]) => {
+                        console.log('Adding ' + rec[0].value);
+                    },
+                    shouldDisplay: (rec: Data[]) => rec.length === 1 && rec[0].value === 'a',
+                    id: 'a',
+                    icon: 'play',
                 },
-                shouldDisplay: (rec: Data[]) => rec.length === 1 && rec[0].value === 'a',
-            },
-        ],
-        displayWithEntity: false,
+                {
+                    label: 'Stop',
+                    handler: (rec: Data[]) => {
+                        console.log('Adding ' + rec[0].value);
+                    },
+                    shouldDisplay: (rec: Data[]) => rec.length === 1 && rec[0].value === 'b',
+                    id: 'b',
+                    icon: 'pause',
+                },
+                {
+                    label: 'Anythign',
+                    handler: (rec: Data[]) => {
+                        console.log('Adding ' + rec[0].value);
+                    },
+                    shouldDisplay: (rec: Data[]) => rec.length === 1 && rec[0].value === 'a',
+                    id: 'c',
+                    icon: 'warn',
+                },
+            ],
+            featuredCount: 2,
+            featured: ['a', 'b'],
+            position: ContextualButtonPosition.TOP,
+        },
     };
+
+    // Always disable for both options
+    // Featured buttons display as icons
+    // Hpw many featured should display?
+    // Global buttons | context (actions dropdown)
+    // Dont feature disabled buttons (fallback to list)
+    // Start stop example
 
     selectionType = GridSelectionType.Single;
 
     changeButtonLocation(): void {
-        this.buttonConfig.displayWithEntity = !this.buttonConfig.displayWithEntity;
-        if (this.buttonConfig.displayWithEntity) {
+        if (this.buttonConfig.contextualButtons.position === ContextualButtonPosition.TOP) {
+            this.buttonConfig.contextualButtons.position = ContextualButtonPosition.ROW;
             this.selectionType = GridSelectionType.None;
         } else {
+            this.buttonConfig.contextualButtons.position = ContextualButtonPosition.TOP;
             this.selectionType = GridSelectionType.Single;
         }
     }

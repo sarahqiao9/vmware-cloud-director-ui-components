@@ -65,7 +65,7 @@ export interface GlobalButton {
 /**
  * A type of button who's displayability dependends on the selected entity.
  */
-export interface ConditionalEntityButton<R> {
+export interface ContextualButton<R> {
     /**
      * The translated text of the button.
      */
@@ -86,6 +86,44 @@ export interface ConditionalEntityButton<R> {
      * The css class the button should have.
      */
     class?: string;
+    /**
+     * The unique ID of this button.
+     */
+    id: string;
+    /**
+     * The Clarity icon of the contextual button that is displayed if the button is featured.
+     */
+    icon: string;
+}
+
+/**
+ * An enum that describes where the contextual buttons should display.
+ */
+export enum ContextualButtonPosition {
+    TOP = 'TOP',
+    ROW = 'ROW',
+}
+
+/**
+ * A configuration that descibes all the information about the contextual buttons.
+ */
+export interface ContextualButtonConfig<R> {
+    /**
+     * A list of all the contextual buttons.
+     */
+    buttons: ContextualButton<R>[];
+    /**
+     * An ordered list of {@link ContextualButton.id}s of buttons that should be in a featured position.
+     */
+    featured: string[];
+    /**
+     * How many buttons should display on the featured section.
+     */
+    featuredCount: number;
+    /**
+     * Where the buttons should display on the grid.
+     */
+    position: ContextualButtonPosition;
 }
 
 /**
@@ -99,11 +137,7 @@ export interface ButtonConfig<R> {
     /**
      * The buttons who's displayability depends on the selected entity.
      */
-    conditionalButtons: ConditionalEntityButton<R>[];
-    /**
-     * Whether the conditional buttons appear on the top or next to the entity.
-     */
-    displayWithEntity?: boolean;
+    contextualButtons: ContextualButtonConfig<R>;
 }
 
 /**

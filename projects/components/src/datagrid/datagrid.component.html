@@ -1,25 +1,43 @@
-<ng-container *ngIf="buttonConfig">
-    <ng-container *ngFor="let button of buttonConfig.globalButtons">
-        <button class="btn btn-link" [ngClass]="button.class" *ngIf="button.shouldDisplay()" (click)="button.handler()">
-            {{ button.label }}
-        </button>
-    </ng-container>
-
-    <ng-container *ngIf="!buttonConfig.displayWithEntity">
-        <ng-container *ngFor="let button of buttonConfig.conditionalButtons">
-            <button
-                class="btn btn-link"
-                [ngClass]="button.class"
-                *ngIf="button.shouldDisplay(getDatagridSelection())"
-                (click)="button.handler(getDatagridSelection())"
-            >
+<clr-datagrid [clrDgLoading]="isLoading" [ngClass]="this.clrDatagridCssClass">
+    <clr-dg-action-bar *ngIf="buttonConfig">
+        <div class="btn-group" *ngFor="let button of buttonConfig.globalButtons">
+            <button class="btn" [ngClass]="button.class" *ngIf="button.shouldDisplay()" (click)="button.handler()">
                 {{ button.label }}
             </button>
-        </ng-container>
-    </ng-container>
-</ng-container>
+        </div>
 
-<clr-datagrid [clrDgLoading]="isLoading" [ngClass]="this.clrDatagridCssClass">
+        <div
+            class="btn-group"
+            *ngIf="
+                buttonConfig.contextualButtons.position === ContextualButtonPosition.TOP &&
+                getDatagridSelection().length !== 0
+            "
+        >
+            <ng-container *ngFor="let button of this.getFeaturedButtons(this.getDatagridSelection())">
+                <button type="button" class="btn btn-icon" (click)="button.handler(getDatagridSelection())">
+                    <clr-icon [attr.shape]="button.icon"></clr-icon>
+                </button>
+            </ng-container>
+            <clr-dropdown class="btn-group-overflow open" *ngIf="buttonConfig.contextualButtons.buttons.length !== 0">
+                <button class="btn dropdown-toggle" clrDropdownTrigger>
+                    <clr-icon shape="ellipsis-horizontal"></clr-icon>
+                </button>
+                <clr-dropdown-menu class="dropdown-menu" *clrIfOpen>
+                    <ng-container *ngFor="let button of buttonConfig.contextualButtons.buttons">
+                        <button
+                            class="btn"
+                            [ngClass]="button.class"
+                            [class.disabled]="!button.shouldDisplay(getDatagridSelection())"
+                            (click)="button.handler(getDatagridSelection())"
+                        >
+                            {{ button.label }}
+                        </button>
+                    </ng-container>
+                </clr-dropdown-menu>
+            </clr-dropdown>
+        </div>
+    </clr-dg-action-bar>
+
     <clr-dg-column *ngFor="let column of columnsConfig">
         <ng-container *ngIf="isColumnHideable(column); else notHideable">
             <ng-container *clrDgHideableColumn="{ hidden: column.hideable === GridColumnHideable.Hidden }">{{
@@ -35,9 +53,19 @@
         [ngClass]="this.clrDatarowCssClassGetter(restItem, i)"
         [clrDgItem]="restItem"
     >
-        <clr-dg-action-overflow *ngIf="buttonConfig.displayWithEntity">
+        <button
+            type="button"
+            class="btn btn-icon datagrid-row-action"
+            *ngFor="let button of this.getFeaturedButtons([restItem])"
+            (click)="button.handler([restItem])"
+            type="button"
+            role="button"
+        >
+            <clr-icon [attr.shape]="button.icon"></clr-icon>
+        </button>
+        <clr-dg-action-overflow *ngIf="buttonConfig.contextualButtons.position === ContextualButtonPosition.ROW">
             <button
-                *ngFor="let button of buttonConfig.conditionalButtons"
+                *ngFor="let button of buttonConfig.contextualButtons.buttons"
                 class="action-item"
                 (click)="button.handler([restItem])"
                 [disabled]="!button.shouldDisplay([restItem])"

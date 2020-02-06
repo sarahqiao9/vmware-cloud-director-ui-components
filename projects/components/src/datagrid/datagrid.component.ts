@@ -3,9 +3,21 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+import { ContextualButton } from './interfaces/datagrid-column.interface';
+/*!
+ * Copyright 2019 VMware, Inc.
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, TrackByFunction } from '@angular/core';
 import { ClrDatagridFilter, ClrDatagrid } from '@clr/angular';
-import { FunctionRenderer, GridColumn, GridColumnHideable, ButtonConfig } from './interfaces/datagrid-column.interface';
+import {
+    FunctionRenderer,
+    GridColumn,
+    GridColumnHideable,
+    ButtonConfig,
+    ContextualButtonPosition,
+} from './interfaces/datagrid-column.interface';
 import { ComponentRendererSpec } from './interfaces/component-renderer.interface';
 
 /**
@@ -122,6 +134,7 @@ export class DatagridComponent<R> implements OnInit {
         this._selectionType = selectionType;
         this.updateSeletionInformation();
     }
+    ContextualButtonPosition = ContextualButtonPosition;
     GridColumnHideable = GridColumnHideable;
     private _columns: GridColumn<R>[];
 
@@ -134,7 +147,12 @@ export class DatagridComponent<R> implements OnInit {
 
     @Input() buttonConfig: ButtonConfig<R> = {
         globalButtons: [],
-        conditionalButtons: [],
+        contextualButtons: {
+            buttons: [],
+            featured: [],
+            position: ContextualButtonPosition.TOP,
+            featuredCount: 0,
+        },
     };
 
     /**
@@ -230,6 +248,28 @@ export class DatagridComponent<R> implements OnInit {
     @ViewChild(ClrDatagridFilter, { static: false }) numericFilter: ClrDatagridFilter;
 
     @ViewChild(ClrDatagrid, { static: true }) datagrid: ClrDatagrid;
+
+    getFeaturedButtons(selection: R[]): ContextualButton<R>[] {
+        let toTake = this.buttonConfig.contextualButtons.featuredCount;
+        const toOutput = [];
+        this.buttonConfig.contextualButtons.featured.forEach(featured => {
+            if (toTake === 0) {
+                return;
+            }
+            const buttons = this.buttonConfig.contextualButtons.buttons.filter(button => button.id === featured);
+            if (buttons.length === 1) {
+                const button = buttons[0];
+                if (button.shouldDisplay(selection)) {
+                    toOutput.push(button);
+                    toTake -= 1;
+                }
+            } else {
+                throw new Error('Featured button was not found');
+            }
+        });
+        console.log(toOutput);
+        return toOutput;
+    }
 
     @Input() trackBy: TrackByFunction<R> = (index, unit) => (unit && (unit as any).href ? (unit as any).href : index);
 
