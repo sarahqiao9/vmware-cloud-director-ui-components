@@ -11,7 +11,8 @@ interface Data {
 }
 
 /**
- * A component that holds an example of the grid selection capability.
+ * Logs the selected row to the console when the selection changes.
+ * Allows for multi, single, or no selection.
  */
 @Component({
     selector: 'vcd-datagrid-row-select-example',

@@ -68,8 +68,8 @@ export abstract class WidgetObject<T> {
      * @param cssSelector Pass this in if you want to click a specific element. If not passed in, the entire node will
      * receive the click event
      */
-    protected click(cssSelector?: string): void {
-        const nativeElement: HTMLBaseElement = this.findElement(cssSelector).nativeElement;
+    protected click(cssSelector?: string, parent: DebugElement = this.root): void {
+        const nativeElement: HTMLBaseElement = parent.query(By.css(cssSelector)).nativeElement;
         nativeElement.click();
         this.detectChanges();
     }

@@ -120,7 +120,7 @@ export class DatagridComponent<R> implements OnInit {
      */
     @Input() set selectionType(selectionType: GridSelectionType) {
         this._selectionType = selectionType;
-        this.updateSeletionInformation();
+        this.clearSelectionInformation();
     }
     GridColumnHideable = GridColumnHideable;
     private _columns: GridColumn<R>[];
@@ -238,33 +238,29 @@ export class DatagridComponent<R> implements OnInit {
     ngOnInit(): void {
         this.isLoading = true;
         this.gridRefresh.emit({});
-        this.updateSeletionInformation();
+        this.clearSelectionInformation();
     }
 
     private updateSelectedItems(): void {
         if (this._selectionType === GridSelectionType.Single) {
-            console.log(this.datagrid.selection.currentSingle);
-            let found = false;
-            this.items.forEach(
+            // Tries to find the currently selected item. If it isn't found, clears the selection.
+            const found = this.items.find(
                 (item, itemIndex) =>
-                    (found =
-                        found ||
-                        this.trackBy(itemIndex, item) ===
-                            this.trackBy(
-                                this.items.indexOf(this.datagrid.selection.currentSingle),
-                                this.datagrid.selection.currentSingle
-                            ))
+                    this.trackBy(itemIndex, item) ===
+                    this.trackBy(
+                        this.items.indexOf(this.datagrid.selection.currentSingle),
+                        this.datagrid.selection.currentSingle
+                    )
             );
             if (!found) {
                 this.datagrid.selection.currentSingle = undefined;
             }
         } else if (this._selectionType === GridSelectionType.Multi) {
+            // Tries to find the currently selected items. If an item isn't found, clears the selection for that item.
             if (this.datagrid.selection.current) {
                 this.datagrid.selection.current = this.datagrid.selection.current.filter((selected, selectedIndex) => {
-                    let found = false;
-                    this.items.forEach(
-                        (item, itemIndex) =>
-                            (found = found || this.trackBy(itemIndex, item) === this.trackBy(selectedIndex, selected))
+                    const found = this.items.find(
+                        (item, itemIndex) => this.trackBy(itemIndex, item) === this.trackBy(selectedIndex, selected)
                     );
                     return found;
                 });
@@ -272,7 +268,7 @@ export class DatagridComponent<R> implements OnInit {
         }
     }
 
-    private updateSeletionInformation(): void {
+    private clearSelectionInformation(): void {
         if (!this.datagrid) {
             return;
         }
@@ -293,10 +289,10 @@ export class DatagridComponent<R> implements OnInit {
      * Returns the items selected in the VCD datagrid.
      */
     getDatagridSelection(): R[] {
-        if (this.datagrid.selection.currentSingle !== undefined && this.datagrid.selection.currentSingle !== null) {
+        if (this.datagrid.selection.currentSingle) {
             return [this.datagrid.selection.currentSingle];
         }
-        if (this.datagrid.selection.current !== undefined) {
+        if (this.datagrid.selection.current) {
             return this.datagrid.selection.current;
         }
         return [];
