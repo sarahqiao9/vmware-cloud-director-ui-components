@@ -56,6 +56,13 @@ export interface GridDataFetchResult<R> {
 }
 
 /**
+ * Representation an entity that has a href property.
+ */
+interface HasHref {
+    href?: string;
+}
+
+/**
  * The current state of various features of the grid like filtering, sorting, pagination. This object is emitted as
  * part of the event {@link DatagridComponent.gridRefresh}. The handler then used this object to construct a query.
  * TODO: This interface is going to defined as part of working on the following tasks:
@@ -226,7 +233,13 @@ export class DatagridComponent<R> implements OnInit {
 
     @ViewChild(ClrDatagrid, { static: true }) datagrid: ClrDatagrid;
 
-    @Input() trackBy: TrackByFunction<R> = (index, unit) => (unit && (unit as any).href ? (unit as any).href : index);
+    /**
+     * Returns an identifier for the given record at the given index.
+     *
+     * If the record has a href, defaults to that. Else, defaults to index.
+     */
+    @Input() trackBy: TrackByFunction<R> = (index: number, record: (R & HasHref) | undefined): string | number =>
+        record && (record.href || index);
 
     /**
      * Gives the CSS class to use for a given datarow based on its relative index and entity definition.

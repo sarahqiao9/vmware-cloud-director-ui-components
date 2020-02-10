@@ -170,6 +170,21 @@ describe('DatagridComponent', () => {
                 expect(this.finder.hostComponent.getSelection()).toEqual([]);
             });
 
+            it('should keep selected an item if the item is not removed on refresh', function(this: HasFinderAndGrid): void {
+                this.finder.hostComponent.selectionType = GridSelectionType.Single;
+                this.finder.detectChanges();
+                this.clrGridWidget.selectRow(1);
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+                this.finder.hostComponent.gridData = {
+                    items: [mockData[1]],
+                    totalItems: 2,
+                    pageSize: 2,
+                    page: 1,
+                };
+                this.finder.detectChanges();
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+            });
+
             it('should unselect an item if the item is removed for multi selection', function(this: HasFinderAndGrid): void {
                 this.finder.hostComponent.selectionType = GridSelectionType.Multi;
                 this.finder.detectChanges();
