@@ -245,6 +245,9 @@ export class DatagridComponent<R> implements OnInit {
 
     @ViewChild(ClrDatagrid, { static: true }) datagrid: ClrDatagrid;
 
+    /**
+     * Returns the buttons that should be featured given the {@param selection} of currently selected entities.
+     */
     getFeaturedButtons(selection: R[]): ContextualButton<R>[] {
         let toTake = this.buttonConfig.contextualButtons.featuredCount;
         const toOutput = [];
@@ -263,7 +266,6 @@ export class DatagridComponent<R> implements OnInit {
                 throw new Error('Featured button was not found');
             }
         });
-        console.log(toOutput);
         return toOutput;
     }
 
@@ -295,7 +297,6 @@ export class DatagridComponent<R> implements OnInit {
 
     private updateSelectedItems(): void {
         if (this._selectionType === GridSelectionType.Single) {
-            console.log(this.datagrid.selection.currentSingle);
             let found = false;
             this.items.forEach(
                 (item, itemIndex) =>

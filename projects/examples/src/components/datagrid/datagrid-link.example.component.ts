@@ -15,6 +15,7 @@ import {
 
 interface Data {
     value: string;
+    paused: boolean;
 }
 
 /**
@@ -60,18 +61,20 @@ export class DatagridLinkExampleComponent {
                 {
                     label: 'Start',
                     handler: (rec: Data[]) => {
-                        console.log('Adding ' + rec[0].value);
+                        console.log('Starting ' + rec[0].value);
+                        rec[0].paused = false;
                     },
-                    shouldDisplay: (rec: Data[]) => rec.length === 1 && rec[0].value === 'a',
+                    shouldDisplay: (rec: Data[]) => rec.length === 1 && rec[0].paused,
                     id: 'a',
                     icon: 'play',
                 },
                 {
                     label: 'Stop',
                     handler: (rec: Data[]) => {
-                        console.log('Adding ' + rec[0].value);
+                        console.log('Stopping ' + rec[0].value);
+                        rec[0].paused = true;
                     },
-                    shouldDisplay: (rec: Data[]) => rec.length === 1 && rec[0].value === 'a',
+                    shouldDisplay: (rec: Data[]) => rec.length === 1 && !rec[0].paused,
                     id: 'b',
                     icon: 'pause',
                 },
@@ -112,7 +115,7 @@ export class DatagridLinkExampleComponent {
 
     refresh(eventData: GridState<Data>): void {
         this.gridData = {
-            items: [{ value: 'a' }, { value: 'b' }],
+            items: [{ value: 'a', paused: false }, { value: 'b', paused: true }],
             totalItems: 2,
             pageSize: 2,
             page: 1,
