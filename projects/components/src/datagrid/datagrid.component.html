@@ -38,6 +38,12 @@
         </div>
     </clr-dg-action-bar>
 
+    <clr-dg-column
+        *ngIf="buttonConfig.contextualButtons.position === ContextualButtonPosition.ROW"
+        [ngClass]="'buttons-' + this.getMaxFeaturedButtonsOnRow()"
+    >
+        Actions</clr-dg-column
+    >
     <clr-dg-column *ngFor="let column of columnsConfig">
         <ng-container *ngIf="isColumnHideable(column); else notHideable">
             <ng-container *clrDgHideableColumn="{ hidden: column.hideable === GridColumnHideable.Hidden }">{{
@@ -53,27 +59,41 @@
         [ngClass]="this.clrDatarowCssClassGetter(restItem, i)"
         [clrDgItem]="restItem"
     >
-        <button
-            type="button"
-            class="btn btn-icon datagrid-row-action"
-            *ngFor="let button of this.getFeaturedButtons([restItem])"
-            (click)="button.handler([restItem])"
-            type="button"
-            role="button"
+        <clr-dg-cell
+            *ngIf="buttonConfig.contextualButtons.position === ContextualButtonPosition.ROW"
+            class="action-button-cell"
+            [ngClass]="'buttons-' + this.getMaxFeaturedButtonsOnRow()"
         >
-            <clr-icon [attr.shape]="button.icon"></clr-icon>
-        </button>
-        <clr-dg-action-overflow *ngIf="buttonConfig.contextualButtons.position === ContextualButtonPosition.ROW">
-            <button
-                *ngFor="let button of buttonConfig.contextualButtons.buttons"
-                class="action-item"
-                (click)="button.handler([restItem])"
-                [disabled]="!button.shouldDisplay([restItem])"
-                [ngClass]="button.class"
-            >
-                {{ button.label }}
-            </button>
-        </clr-dg-action-overflow>
+            <div class="btn-group action-button-group">
+                <button
+                    class="btn btn-icon action-button"
+                    *ngFor="let button of this.getFeaturedButtons([restItem])"
+                    (click)="button.handler([restItem])"
+                >
+                    <clr-icon size="1em" [attr.shape]="button.icon" class="action-icon"></clr-icon>
+                </button>
+                <clr-dropdown
+                    class="btn-group-overflow open action-button"
+                    *ngIf="buttonConfig.contextualButtons.buttons.length !== 0"
+                >
+                    <button class="btn action-button dropdown-small" clrDropdownTrigger>
+                        <clr-icon shape="ellipsis-horizontal action-icon"></clr-icon>
+                    </button>
+                    <clr-dropdown-menu class="dropdown-menu" *clrIfOpen>
+                        <ng-container *ngFor="let button of buttonConfig.contextualButtons.buttons">
+                            <button
+                                class="btn"
+                                [ngClass]="button.class"
+                                [class.disabled]="!button.shouldDisplay([restItem])"
+                                (click)="button.handler([restItem])"
+                            >
+                                {{ button.label }}
+                            </button>
+                        </ng-container>
+                    </clr-dropdown-menu>
+                </clr-dropdown>
+            </div>
+        </clr-dg-cell>
 
         <clr-dg-cell *ngFor="let column of columnsConfig">
             <!-- Default renderer -->

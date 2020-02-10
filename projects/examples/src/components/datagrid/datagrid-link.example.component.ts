@@ -71,7 +71,7 @@ export class DatagridLinkExampleComponent {
                     handler: (rec: Data[]) => {
                         console.log('Adding ' + rec[0].value);
                     },
-                    shouldDisplay: (rec: Data[]) => rec.length === 1 && rec[0].value === 'b',
+                    shouldDisplay: (rec: Data[]) => rec.length === 1 && rec[0].value === 'a',
                     id: 'b',
                     icon: 'pause',
                 },
@@ -85,7 +85,7 @@ export class DatagridLinkExampleComponent {
                     icon: 'warn',
                 },
             ],
-            featuredCount: 2,
+            featuredCount: 3,
             featured: ['a', 'b'],
             position: ContextualButtonPosition.TOP,
         },

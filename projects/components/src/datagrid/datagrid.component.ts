@@ -3,12 +3,6 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-import { ContextualButton } from './interfaces/datagrid-column.interface';
-/*!
- * Copyright 2019 VMware, Inc.
- * SPDX-License-Identifier: BSD-2-Clause
- */
-
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, TrackByFunction } from '@angular/core';
 import { ClrDatagridFilter, ClrDatagrid } from '@clr/angular';
 import {
@@ -18,6 +12,7 @@ import {
     ButtonConfig,
     ContextualButtonPosition,
 } from './interfaces/datagrid-column.interface';
+import { ContextualButton } from './interfaces/datagrid-column.interface';
 import { ComponentRendererSpec } from './interfaces/component-renderer.interface';
 
 /**
@@ -104,6 +99,7 @@ interface ColumnConfigInternal<R, T> extends GridColumn<R> {
 @Component({
     selector: 'vcd-datagrid',
     templateUrl: './datagrid.component.html',
+    styleUrls: ['./datagrid.component.scss'],
 })
 export class DatagridComponent<R> implements OnInit {
     /**
@@ -269,6 +265,17 @@ export class DatagridComponent<R> implements OnInit {
         });
         console.log(toOutput);
         return toOutput;
+    }
+
+    /**
+     * Returns the maximum number of featured buttons next to a single row.
+     */
+    getMaxFeaturedButtonsOnRow(): number {
+        let max = 0;
+        this.items.forEach(item => {
+            max = Math.max(this.getFeaturedButtons([item]).length, max);
+        });
+        return max;
     }
 
     @Input() trackBy: TrackByFunction<R> = (index, unit) => (unit && (unit as any).href ? (unit as any).href : index);
