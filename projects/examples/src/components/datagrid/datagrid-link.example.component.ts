@@ -115,7 +115,14 @@ export class DatagridLinkExampleComponent {
 
     refresh(eventData: GridState<Data>): void {
         this.gridData = {
-            items: [{ value: 'a', paused: false }, { value: 'b', paused: true }],
+            items: [
+                { value: 'a', paused: false },
+                { value: 'b', paused: true },
+                { value: 'a', paused: true },
+                { value: 'b', paused: true },
+                { value: 'a', paused: false },
+                { value: 'b', paused: true },
+            ],
             totalItems: 2,
             pageSize: 2,
             page: 1,

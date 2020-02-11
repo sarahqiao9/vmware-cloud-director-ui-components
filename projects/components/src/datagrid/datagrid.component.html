@@ -1,6 +1,6 @@
 <ng-template #dropdown>
     <clr-dropdown class="btn-group-overflow open" *ngIf="buttonConfig.contextualButtons.buttons.length !== 0">
-        <button class="btn dropdown-toggle" clrDropdownTrigger>
+        <button class="btn dropdown-toggle dropdown-small" clrDropdownTrigger>
             <clr-icon shape="ellipsis-horizontal"></clr-icon>
         </button>
         <clr-dropdown-menu class="dropdown-menu" *clrIfOpen>
@@ -35,7 +35,10 @@
             <div class="btn-group" *ngIf="this.getFeaturedButtons(this.getDatagridSelection()).length !== 0">
                 <ng-container *ngFor="let button of this.getFeaturedButtons(this.getDatagridSelection())">
                     <button type="button" class="btn btn-icon" (click)="button.handler(getDatagridSelection())">
-                        <clr-icon [attr.shape]="button.icon"></clr-icon>
+                        <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-xs">
+                            <clr-icon [attr.shape]="button.icon"></clr-icon>
+                            <span class="tooltip-content">{{ button.label }}</span>
+                        </a>
                     </button>
                 </ng-container>
                 <ng-container *ngTemplateOutlet="dropdown"></ng-container>
@@ -78,7 +81,10 @@
                     *ngFor="let button of this.getFeaturedButtons([restItem])"
                     (click)="button.handler([restItem])"
                 >
-                    <clr-icon size="1em" [attr.shape]="button.icon" class="action-icon"></clr-icon>
+                    <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-xs">
+                        <clr-icon size="1em" [attr.shape]="button.icon" class="action-icon"></clr-icon>
+                        <span class="tooltip-content">{{ button.label }}</span>
+                    </a>
                 </button>
                 <clr-dropdown
                     class="btn-group-overflow open action-button"
