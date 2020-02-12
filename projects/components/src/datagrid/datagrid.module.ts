@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+import { LinkedTextRendererComponent } from './renderers/linked-text-renderer.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
@@ -13,13 +14,23 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FunctionRendererPipe } from './pipes/function-renderer.pipe';
 import { BoldTextRendererComponent } from './renderers/bold-text-renderer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
+import { CliptextModule } from '../cliptext/cliptext.module';
 
 const directives = [DatagridComponent, ComponentRendererOutletDirective];
 const pipes = [FunctionRendererPipe];
-const renderers = [BoldTextRendererComponent];
+const renderers = [BoldTextRendererComponent, LinkedTextRendererComponent];
 
 @NgModule({
-    imports: [CommonModule, ClarityModule, PipesModule, ReactiveFormsModule, BrowserAnimationsModule],
+    imports: [
+        CommonModule,
+        ClarityModule,
+        RouterModule,
+        PipesModule,
+        ReactiveFormsModule,
+        CliptextModule,
+        BrowserAnimationsModule,
+    ],
     declarations: [...directives, ...renderers, ...pipes],
     providers: [],
     exports: [DatagridComponent, ...renderers],

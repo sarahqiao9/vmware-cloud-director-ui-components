@@ -16,7 +16,14 @@ import {
     ElementRef,
 } from '@angular/core';
 import { ClrDatagridFilter, ClrDatagridStateInterface, ClrDatagridSortOrder, ClrDatagrid } from '@clr/angular';
-import { FunctionRenderer, GridColumn, GridColumnHideable } from './interfaces/datagrid-column.interface';
+import {
+    FunctionRenderer,
+    GridColumn,
+    GridColumnHideable,
+    ContextualButtonPosition,
+    ButtonConfig,
+} from './interfaces/datagrid-column.interface';
+import { ContextualButton } from './interfaces/datagrid-column.interface';
 import { ComponentRendererSpec } from './interfaces/component-renderer.interface';
 
 /**
@@ -129,6 +136,7 @@ interface ColumnConfigInternal<R, T> extends GridColumn<R> {
 @Component({
     selector: 'vcd-datagrid',
     templateUrl: './datagrid.component.html',
+    styleUrls: ['./datagrid.component.scss'],
 })
 export class DatagridComponent<R> implements OnInit {
     /**
@@ -161,6 +169,7 @@ export class DatagridComponent<R> implements OnInit {
         this._selectionType = selectionType;
         this.clearSelectionInformation();
     }
+    ContextualButtonPosition = ContextualButtonPosition;
     GridColumnHideable = GridColumnHideable;
     private _columns: GridColumn<R>[];
 
@@ -170,6 +179,16 @@ export class DatagridComponent<R> implements OnInit {
      * The CSS class to use for the Clarity datagrid.
      */
     @Input() clrDatagridCssClass = '';
+
+    @Input() buttonConfig: ButtonConfig<R> = {
+        globalButtons: [],
+        contextualButtons: {
+            buttons: [],
+            featured: [],
+            position: ContextualButtonPosition.TOP,
+            featuredCount: 0,
+        },
+    };
 
     /**
      * Buttons to display in the toolbar on top of data grid
@@ -266,12 +285,46 @@ export class DatagridComponent<R> implements OnInit {
     @ViewChild(ClrDatagrid, { static: true }) datagrid: ClrDatagrid;
 
     /**
+     * Returns the buttons that should be featured given the {@param selection} of currently selected entities.
+     */
+    getFeaturedButtons(selection: R[]): ContextualButton<R>[] {
+        let toTake = this.buttonConfig.contextualButtons.featuredCount;
+        const toOutput = [];
+        this.buttonConfig.contextualButtons.featured.forEach(featured => {
+            if (toTake === 0) {
+                return;
+            }
+            const buttons = this.buttonConfig.contextualButtons.buttons.filter(button => button.id === featured);
+            if (buttons.length === 1) {
+                const button = buttons[0];
+                if (button.shouldDisplay(selection)) {
+                    toOutput.push(button);
+                    toTake -= 1;
+                }
+            } else {
+                throw new Error('Featured button was not found');
+            }
+        });
+        return toOutput;
+    }
+
+    /**
+     * Returns the maximum number of featured buttons next to a single row.
+     */
+    getMaxFeaturedButtonsOnRow(): number {
+        let max = 0;
+        this.items.forEach(item => {
+            max = Math.max(this.getFeaturedButtons([item]).length, max);
+        });
+        return max;
+    }
+
+    /**
      * Returns an identifier for the given record at the given index.
      *
      * If the record has a href, defaults to that. Else, defaults to index.
      */
-    @Input() trackBy: TrackByFunction<R> = (index: number, record: (R & HasHref) | undefined): string | number =>
-        record && (record.href || index);
+    @Input() trackBy: TrackByFunction<R> = (index, unit) => (unit && (unit as any).href ? (unit as any).href : index);
 
     /**
      * Gives the CSS class to use for a given datarow based on its relative index and entity definition.

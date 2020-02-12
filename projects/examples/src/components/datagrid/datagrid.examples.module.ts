@@ -18,6 +18,8 @@ import { DatagrilSortExampleModule } from './datagrid-sort.example.module';
 import { DatagridSortExampleComponent } from './datagrid-sort.example.component';
 import { RowSelectDatagridExampleComponent } from './datagrid-row-select.example.component';
 import { DatagrigRowSelectExampleModule } from './datagrid-row-select.example.module';
+import { DatagridLinkExampleComponent } from './datagrid-link.example.component';
+import { DatagridLinkExampleModule } from './datagrid-link.example.module';
 
 Documentation.registerDocumentationEntry({
     component: DatagridComponent,
@@ -54,6 +56,11 @@ Documentation.registerDocumentationEntry({
             forComponent: null,
             title: 'Select datagrid row example',
         },
+        {
+            component: DatagridLinkExampleComponent,
+            forComponent: null,
+            title: 'Links from Datagrid Example',
+        },
     ],
 });
 /**
@@ -67,6 +74,7 @@ Documentation.registerDocumentationEntry({
         DatagridDetailRowExampleModule,
         DatagrilSortExampleModule,
         DatagrigRowSelectExampleModule,
+        DatagridLinkExampleModule,
     ],
 })
 export class DatagridExamplesModule {}
