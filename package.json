@@ -16,16 +16,13 @@
     "test:ci:doc-lib": "ng test doc-lib --watch=false --browsers ChromeHeadlessNoSandbox --code-coverage",
     "test:components": "ng test components",
     "test:ci:components": "ng test components --watch=false --browsers ChromeHeadlessNoSandbox --code-coverage",
-
     "lint": "ng lint",
     "lint-fix": "tslint --fix 'projects/**/*.ts' -e 'projects/doc-lib/node_modules/**/*.ts'",
-
     "e2e": "ng e2e",
     "build-components-doc": "mkdir -p projects/examples/gen; cd projects/doc-lib; node $NODE_DEBUG_OPTION scripts/index.js ../components/tsconfig.lib.json ../components/src/public-api.ts ../examples/gen/components-doc.json",
     "build-examples-doc": "mkdir -p projects/examples/gen; cd projects/doc-lib; node $NODE_DEBUG_OPTION scripts/index.js ../examples/tsconfig.app.json ../examples/src/main.ts ../examples/gen/examples-doc.json"
   },
   "private": true,
-
   "dependencies": {
     "@angular/animations": "8.2.8",
     "@angular/common": "8.2.8",
@@ -55,11 +52,13 @@
     "@angular/cli": "8.3.9",
     "@angular/compiler-cli": "8.2.8",
     "@angular/language-service": "8.2.8",
+    "@compodoc/compodoc": "^1.1.11",
     "@types/jasmine": "3.3.8",
     "@types/jasminewd2": "2.0.3",
     "@types/node": "8.9.4",
     "codelyzer": "5.0.0",
     "directory-tree": "2.2.4",
+    "firebase-tools": "6.12.0",
     "husky": "3.0.9",
     "jasmine-core": "3.4.0",
     "jasmine-spec-reporter": "4.2.1",
@@ -76,8 +75,7 @@
     "tsickle": "0.37.1",
     "tslint": "5.15.0",
     "tslint-microsoft-contrib": "6.2.0",
-    "typescript": "3.5.3",
-    "firebase-tools": "6.12.0"
+    "typescript": "3.5.3"
   },
   "peerDependencies": {
     "@angular/animations": "8.*",
