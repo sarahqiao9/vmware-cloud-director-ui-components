@@ -4,7 +4,7 @@
  */
 
 import { Component, ViewChild, TemplateRef, ContentChild } from '@angular/core';
-import { DatagridComponent, GridDataFetchResult, GridState } from './datagrid.component';
+import { DatagridComponent, GridDataFetchResult, GridState, GridSelectionType } from './datagrid.component';
 import { GridColumn, GridColumnHideable } from './interfaces/datagrid-column.interface';
 import { TestBed } from '@angular/core/testing';
 import { DatagridModule } from './datagrid.module';
@@ -22,6 +22,7 @@ export interface MockRecord {
         gender: string;
     };
     age: number;
+    href: string;
 }
 
 export const mockData: MockRecord[] = [
@@ -33,6 +34,7 @@ export const mockData: MockRecord[] = [
             gender: 'Male',
         },
         age: 30,
+        href: '1',
     },
     {
         name: 'Person 2',
@@ -42,6 +44,7 @@ export const mockData: MockRecord[] = [
             gender: 'Female',
         },
         age: 60,
+        href: '2',
     },
 ];
 
@@ -130,6 +133,78 @@ describe('DatagridComponent', () => {
                     'secondRowB',
                     'Expected a different new class to display for the second row.'
                 );
+            });
+
+            it('has multi selection capabilities when set to multi', function(this: HasFinderAndGrid): void {
+                this.finder.hostComponent.selectionType = GridSelectionType.Multi;
+                this.finder.detectChanges();
+                expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.Multi);
+                this.clrGridWidget.selectRow(0);
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
+                this.clrGridWidget.selectRow(1);
+                expect(this.finder.hostComponent.getSelection()).toEqual(mockData);
+            });
+
+            it('has single selection capabilities when set to single', function(this: HasFinderAndGrid): void {
+                this.finder.hostComponent.selectionType = GridSelectionType.Single;
+                this.finder.detectChanges();
+                expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.Single);
+                this.clrGridWidget.selectRow(0);
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
+                this.clrGridWidget.selectRow(1);
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+            });
+
+            it('should unselect an item if the item is removed for single selection', function(this: HasFinderAndGrid): void {
+                this.finder.hostComponent.selectionType = GridSelectionType.Single;
+                this.finder.detectChanges();
+                this.clrGridWidget.selectRow(1);
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+                this.finder.hostComponent.gridData = {
+                    items: [mockData[0]],
+                    totalItems: 2,
+                    pageSize: 2,
+                    page: 1,
+                };
+                this.finder.detectChanges();
+                expect(this.finder.hostComponent.getSelection()).toEqual([]);
+            });
+
+            it('should keep selected an item if the item is not removed on refresh', function(this: HasFinderAndGrid): void {
+                this.finder.hostComponent.selectionType = GridSelectionType.Single;
+                this.finder.detectChanges();
+                this.clrGridWidget.selectRow(1);
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+                this.finder.hostComponent.gridData = {
+                    items: [mockData[1]],
+                    totalItems: 2,
+                    pageSize: 2,
+                    page: 1,
+                };
+                this.finder.detectChanges();
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+            });
+
+            it('should unselect an item if the item is removed for multi selection', function(this: HasFinderAndGrid): void {
+                this.finder.hostComponent.selectionType = GridSelectionType.Multi;
+                this.finder.detectChanges();
+                this.clrGridWidget.selectRow(0);
+                this.clrGridWidget.selectRow(1);
+                expect(this.finder.hostComponent.getSelection()).toEqual(mockData);
+                this.finder.hostComponent.gridData = {
+                    items: [mockData[0]],
+                    totalItems: 2,
+                    pageSize: 2,
+                    page: 1,
+                };
+                this.finder.detectChanges();
+                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
+            });
+
+            it('has none selection capabilities when set to none', function(this: HasFinderAndGrid): void {
+                this.finder.hostComponent.selectionType = GridSelectionType.None;
+                this.finder.detectChanges();
+                expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.None);
             });
         });
 
@@ -297,9 +372,12 @@ describe('DatagridComponent', () => {
             [columns]="columns"
             [clrDatagridCssClass]="clrDatagridCssClass"
             [clrDatarowCssClassGetter]="clrDatarowCssClassGetter"
+            [selectionType]="selectionType"
+            (selectionChanged)="selectionChanged($event)"
         >
             <ng-template let-record="record"> DETAILS: {{ record.name }} </ng-template>
-        </vcd-datagrid>
+            ></vcd-datagrid
+        >
     `,
 })
 export class HostWithDatagridComponent {
@@ -317,9 +395,19 @@ export class HostWithDatagridComponent {
 
     clrDatagridCssClass = '';
 
+    selectionType = GridSelectionType.None;
+
+    @ViewChild(DatagridComponent, { static: false }) datagrid: DatagridComponent<MockRecord>;
+
+    selectionChanged(selection: MockRecord[]): void {}
+
     clrDatarowCssClassGetter(a: MockRecord, index: number): string {
         return '';
     }
 
     refresh(eventData: GridState<MockRecord>): void {}
+
+    getSelection(): MockRecord[] {
+        return this.datagrid.getDatagridSelection();
+    }
 }

@@ -14,6 +14,7 @@ import { CompodocSchema, DocLibModule } from '@vcd/ui-doc-lib';
 import { AppComponent } from './app.component';
 import { CliptextExamplesModule } from '../components/cliptext/cliptext.examples.module';
 import { DataExporterExamplesModule } from '../components/data-exporter/data-exporter.examples.module';
+import { FormsModule } from '@angular/forms';
 
 import localeFr from '@angular/common/locales/fr';
 import localeEs from '@angular/common/locales/es';
