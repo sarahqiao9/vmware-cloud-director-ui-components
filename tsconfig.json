@@ -25,8 +25,8 @@
       "@vcd/ui-doc-lib": [
         "dist/doc-lib"
       ],
-      "@stackblitz/sdk": [
-        "projects/doc-lib/node_modules/@stackblitz/sdk"
+      "@vcd/i18n": [
+        "dist/i18n"
       ]
     },
     "resolveJsonModule": true,
