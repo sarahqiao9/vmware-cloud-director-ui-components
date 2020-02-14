@@ -20,6 +20,8 @@ import { DatagridLinkExampleComponent } from './datagrid-link.example.component'
 import { DatagridLinkExampleModule } from './datagrid-link.example.module';
 import { DatagridSortExampleModule } from './datagrid-sort.example.module';
 import { DatagridRowSelectExampleModule } from './datagrid-row-select.example.module';
+import { DatagridPaginationExampleComponent } from './datagrid-pagination-example.component';
+import { DatagridPagionationExampleModule } from './datagrid-pagination-example.module';
 
 Documentation.registerDocumentationEntry({
     component: DatagridComponent,
@@ -61,6 +63,11 @@ Documentation.registerDocumentationEntry({
             forComponent: null,
             title: 'Links from Datagrid Example',
         },
+        {
+            component: DatagridPaginationExampleComponent,
+            forComponent: null,
+            title: 'Shows the pagination capability of the datagrid',
+        },
     ],
 });
 /**
@@ -75,6 +82,7 @@ Documentation.registerDocumentationEntry({
         DatagridSortExampleModule,
         DatagridRowSelectExampleModule,
         DatagridLinkExampleModule,
+        DatagridPagionationExampleModule,
     ],
 })
 export class DatagridExamplesModule {}
