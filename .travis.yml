@@ -110,11 +110,5 @@ jobs:
                   condition: $TRAVIS_TAG =~ ^i18n-v[0-999].[0-999].[0-999]$
         - stage: deploy
           name: Deploying to Github pages
-          script: skip
-          deploy:
-              - provider: pages
-                skip_cleanup: true
-                github_token: $GH_TOKEN
-                local_dir: dist/examples
-                on:
-                    branch: topic/vcd-cc/datagrid-test
+          script:
+              - ng deploy --repo=https://github.com/vmware/vmware-cloud-director-ui-components --base-href=/vmware-cloud-director-ui-components/ --no-silent
