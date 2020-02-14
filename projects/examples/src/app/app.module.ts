@@ -19,7 +19,6 @@ import { CompodocSchema, DocLibModule } from '@vcd/ui-doc-lib';
 import { AppComponent } from './app.component';
 import { CliptextExamplesModule } from '../components/cliptext/cliptext.examples.module';
 import { DataExporterExamplesModule } from '../components/data-exporter/data-exporter.examples.module';
-import { FormsModule } from '@angular/forms';
 
 import componentsDocumentationJson from '../../gen/components-doc/documentation.json';
 import examplesDocumentationJson from '../../gen/examples-doc/documentation.json';
