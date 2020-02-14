@@ -43,8 +43,6 @@ jobs:
         - stage: build-app
           name: Build /examples
           script:
-              - mkdir -p projects/examples/gen
-              - npm run build:doc-lib:scripts-dev
               - npm run build-components-doc
               - npm run build-examples-doc
               - npm run generate-translations
@@ -111,4 +109,7 @@ jobs:
         - stage: deploy
           name: Deploying to Github pages
           script:
-              - ng deploy --repo=https://github.com/vmware/vmware-cloud-director-ui-components --base-href=/vmware-cloud-director-ui-components/ --no-silent
+              - npm run build-components-doc
+              - npm run build-examples-doc
+              - npm run generate-translations
+              - ng deploy
