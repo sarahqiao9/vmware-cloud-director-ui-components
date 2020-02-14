@@ -18,13 +18,13 @@ stages:
     - deploy
 jobs:
     include:
-        - stage: prepare
-          name: Lint
-          script:
-              - npm run lint i18n
-              - npm run lint components
-              - npm run lint doc-lib
-              - npm run lint examples
+        #        - stage: prepare
+        #          name: Lint
+        #          script:
+        #              - npm run lint i18n
+        #              - npm run lint components
+        #              - npm run lint doc-lib
+        #              - npm run lint examples
 
         - stage: build-components-lib
           name: Build /components
@@ -36,9 +36,9 @@ jobs:
               - npm run build:doc-lib:scripts-dev
               - npm run build:doc-lib
 
-        - stage: build-i18n
-          name: Build /i18n
-          script: npm run build:i18n
+        #        - stage: build-i18n
+        #          name: Build /i18n
+        #          script: npm run build:i18n
 
         - stage: build-app
           name: Build /examples
@@ -50,17 +50,17 @@ jobs:
               - npm run generate-translations
               - npm run build:examples
 
-        - stage: test
-          name: Unit tests for /components
-          script: npm run test:ci:components
-
-        - stage: test
-          name: Unit Tests for /doc-lib
-          script: npm run test:ci:doc-lib
-
-        - stage: test
-          name: Unit Tests for /i18n
-          script: npm run test:ci:i18n
+        #        - stage: test
+        #          name: Unit tests for /components
+        #          script: npm run test:ci:components
+        #
+        #        - stage: test
+        #          name: Unit Tests for /doc-lib
+        #          script: npm run test:ci:doc-lib
+        #
+        #        - stage: test
+        #          name: Unit Tests for /i18n
+        #          script: npm run test:ci:i18n
 
         - stage: publish
           name: Publishing components to npm registry
@@ -116,3 +116,5 @@ jobs:
                 skip_cleanup: true
                 github_token: $GH_TOKEN
                 local_dir: dist/examples
+                on:
+                    branch: topic/vcd-cc/datagrid-test
