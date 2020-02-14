@@ -19,13 +19,13 @@ stages:
     - deploy
 jobs:
     include:
-        - stage: prepare
-          name: Lint
-          script:
-              - npm run lint i18n
-              - npm run lint components
-              - npm run lint doc-lib
-              - npm run lint examples
+        #        - stage: prepare
+        #          name: Lint
+        #          script:
+        #              - npm run lint i18n
+        #              - npm run lint components
+        #              - npm run lint doc-lib
+        #              - npm run lint examples
 
         - stage: build-components-lib
           name: Build /components
@@ -37,15 +37,13 @@ jobs:
               - npm run build:doc-lib:scripts-dev
               - npm run build:doc-lib
 
-        - stage: build-i18n
-          name: Build /i18n
-          script: npm run build:i18n
+        #        - stage: build-i18n
+        #          name: Build /i18n
+        #          script: npm run build:i18n
 
         - stage: build-app
           name: Build /examples
           script:
-              - mkdir -p projects/examples/gen
-              - npm run build:doc-lib:scripts-dev
               - npm run build-components-doc
               - npm run build-examples-doc
               - npm run generate-translations
@@ -108,9 +106,8 @@ jobs:
                   condition: $TRAVIS_TAG =~ ^i18n-v[0-999].[0-999].[0-999]$
         - stage: deploy
           name: Deploying to Github pages
-          script: skip
-          deploy:
-              - provider: pages
-                skip_cleanup: true
-                github_token: $GH_TOKEN
-                local_dir: dist/examples
+          script:
+              - npm run build-components-doc
+              - npm run build-examples-doc
+              - npm run generate-translations
+              - ng deploy

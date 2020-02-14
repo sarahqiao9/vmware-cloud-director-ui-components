@@ -15,7 +15,13 @@ import {
     TrackByFunction,
     ElementRef,
 } from '@angular/core';
-import { ClrDatagridFilter, ClrDatagridStateInterface, ClrDatagrid, ClrDatagridPagination } from '@clr/angular';
+import {
+    ClrDatagridFilter,
+    ClrDatagridStateInterface,
+    ClrDatagridSortOrder,
+    ClrDatagrid,
+    ClrDatagridPagination,
+} from '@clr/angular';
 import {
     FunctionRenderer,
     GridColumn,

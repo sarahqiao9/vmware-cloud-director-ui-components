@@ -83,6 +83,7 @@ Documentation.registerDocumentationEntry({
         DatagridRowSelectExampleModule,
         DatagridLinkExampleModule,
         DatagridPagionationExampleModule,
+        DatagridLinkExampleModule,
     ],
 })
 export class DatagridExamplesModule {}
