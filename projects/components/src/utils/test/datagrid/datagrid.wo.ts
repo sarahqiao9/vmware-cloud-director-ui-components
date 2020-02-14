@@ -104,7 +104,7 @@ export class ClrDatagridWidgetObject extends WidgetObject<ClrDatagrid> {
         this.columns[index].nativeElement.click();
     }
 
-    /*
+    /**
      * Returns the selection type of the grid.
      */
     getSelectionType(): GridSelectionType {

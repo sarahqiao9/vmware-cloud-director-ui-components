@@ -29,10 +29,12 @@ export class DatagridSortExampleComponent {
         {
             displayName: 'Column',
             renderer: 'value',
+            queryFieldName: 'a',
         },
         {
             displayName: 'Boolean',
             renderer: 'someBool',
+            queryFieldName: 'b',
         },
     ];
 
@@ -46,13 +48,13 @@ export class DatagridSortExampleComponent {
             { value: 'c', someBool: true },
         ];
         if (eventData.sortColumn) {
-            if (eventData.sortColumn.name === 'Column') {
+            if (eventData.sortColumn.name === 'a') {
                 data = data.sort((a, b) => a.value.localeCompare(b.value));
                 if (eventData.sortColumn.reverse) {
                     data = data.reverse();
                 }
             }
-            if (eventData.sortColumn.name === 'Boolean') {
+            if (eventData.sortColumn.name === 'b') {
                 data = data.sort((a, b) => (a.someBool === b.someBool ? 0 : a.someBool ? -1 : 1));
                 if (eventData.sortColumn.reverse) {
                     data = data.reverse();

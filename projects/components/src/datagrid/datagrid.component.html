@@ -55,7 +55,7 @@
     >
         Actions</clr-dg-column
     >
-    <clr-dg-column *ngFor="let column of columnsConfig" [clrDgField]="column.displayName">
+    <clr-dg-column *ngFor="let column of columnsConfig" [clrDgField]="column.queryFieldName">
         <ng-container *ngIf="isColumnHideable(column); else notHideable">
             <ng-container *clrDgHideableColumn="{ hidden: column.hideable === GridColumnHideable.Hidden }">{{
                 column.displayName

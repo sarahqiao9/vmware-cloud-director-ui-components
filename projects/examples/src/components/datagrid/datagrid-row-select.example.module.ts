@@ -8,12 +8,12 @@ import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatagridModule } from '@vcd/ui-components';
-import { RowSelectDatagridExampleComponent } from './datagrid-row-select.example.component';
+import { DatagridRowSelectExampleComponent } from './datagrid-row-select.example.component';
 
 @NgModule({
-    declarations: [RowSelectDatagridExampleComponent],
+    declarations: [DatagridRowSelectExampleComponent],
     imports: [CommonModule, ClarityModule, ReactiveFormsModule, DatagridModule],
-    exports: [RowSelectDatagridExampleComponent],
-    entryComponents: [RowSelectDatagridExampleComponent],
+    exports: [DatagridRowSelectExampleComponent],
+    entryComponents: [DatagridRowSelectExampleComponent],
 })
-export class DatagrigRowSelectExampleModule {}
+export class DatagridRowSelectExampleModule {}

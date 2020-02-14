@@ -15,7 +15,7 @@ import {
     TrackByFunction,
     ElementRef,
 } from '@angular/core';
-import { ClrDatagridFilter, ClrDatagridStateInterface, ClrDatagridSortOrder, ClrDatagrid } from '@clr/angular';
+import { ClrDatagridFilter, ClrDatagridStateInterface, ClrDatagrid } from '@clr/angular';
 import {
     FunctionRenderer,
     GridColumn,
@@ -87,7 +87,7 @@ export interface SortedColumn {
     name: string;
 }
 
-/*
+/**
  * Representation an entity that has a href property.
  */
 interface HasHref {
@@ -324,7 +324,9 @@ export class DatagridComponent<R> implements OnInit {
      *
      * If the record has a href, defaults to that. Else, defaults to index.
      */
-    @Input() trackBy: TrackByFunction<R> = (index, unit) => (unit && (unit as any).href ? (unit as any).href : index);
+    @Input() trackBy: TrackByFunction<R> = (index: number, record: (R & HasHref) | undefined): string | number =>
+        // tslint:disable-next-line: semicolon
+        record && (record.href || index);
 
     /**
      * Gives the CSS class to use for a given datarow based on its relative index and entity definition.

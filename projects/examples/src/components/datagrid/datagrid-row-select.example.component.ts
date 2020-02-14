@@ -16,9 +16,21 @@ interface Data {
  */
 @Component({
     selector: 'vcd-datagrid-row-select-example',
-    templateUrl: 'datagrid-row-select.example.component.html',
+    template: `
+        <button class="btn btn-primary" (click)="selectionType = GridSelectionType.Single">Single Select</button>
+        <button class="btn btn-primary" (click)="selectionType = GridSelectionType.Multi">Multi Select Select</button>
+        <button class="btn btn-primary" (click)="selectionType = GridSelectionType.None">No Select Select</button>
+        <button class="btn btn-primary" (click)="this.newData()">New Data</button>
+        <vcd-datagrid
+            [gridData]="gridData"
+            (gridRefresh)="refresh($event)"
+            [columns]="columns"
+            [selectionType]="selectionType"
+            (selectionChanged)="selectionChanged($event)"
+        ></vcd-datagrid>
+    `,
 })
-export class RowSelectDatagridExampleComponent {
+export class DatagridRowSelectExampleComponent {
     selectionType = GridSelectionType.Multi;
     GridSelectionType = GridSelectionType;
 

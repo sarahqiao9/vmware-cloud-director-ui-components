@@ -14,12 +14,12 @@ import { DatagridCssClassesExampleModule } from './datagrid-css-classes.example.
 import { DatagridShowHideExampleModule } from './datagrid-show-hide.example.module';
 import { DatagridDetailRowExampleComponent } from './datagrid-detail-row.example.component';
 import { DatagridDetailRowExampleModule } from './datagrid-detail-row.example.module';
-import { DatagrilSortExampleModule } from './datagrid-sort.example.module';
 import { DatagridSortExampleComponent } from './datagrid-sort.example.component';
-import { RowSelectDatagridExampleComponent } from './datagrid-row-select.example.component';
-import { DatagrigRowSelectExampleModule } from './datagrid-row-select.example.module';
+import { DatagridRowSelectExampleComponent } from './datagrid-row-select.example.component';
 import { DatagridLinkExampleComponent } from './datagrid-link.example.component';
 import { DatagridLinkExampleModule } from './datagrid-link.example.module';
+import { DatagridSortExampleModule } from './datagrid-sort.example.module';
+import { DatagridRowSelectExampleModule } from './datagrid-row-select.example.module';
 
 Documentation.registerDocumentationEntry({
     component: DatagridComponent,
@@ -52,7 +52,7 @@ Documentation.registerDocumentationEntry({
             title: 'Shows the sorting capability of the datagrid',
         },
         {
-            component: RowSelectDatagridExampleComponent,
+            component: DatagridRowSelectExampleComponent,
             forComponent: null,
             title: 'Select datagrid row example',
         },
@@ -72,8 +72,8 @@ Documentation.registerDocumentationEntry({
         DatagridCssClassesExampleModule,
         DatagridShowHideExampleModule,
         DatagridDetailRowExampleModule,
-        DatagrilSortExampleModule,
-        DatagrigRowSelectExampleModule,
+        DatagridSortExampleModule,
+        DatagridRowSelectExampleModule,
         DatagridLinkExampleModule,
     ],
 })

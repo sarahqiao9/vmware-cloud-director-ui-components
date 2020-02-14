@@ -16,4 +16,4 @@ import { DatagridSortExampleComponent } from './datagrid-sort.example.component'
     exports: [DatagridSortExampleComponent],
     entryComponents: [DatagridSortExampleComponent],
 })
-export class DatagrilSortExampleModule {}
+export class DatagridSortExampleModule {}

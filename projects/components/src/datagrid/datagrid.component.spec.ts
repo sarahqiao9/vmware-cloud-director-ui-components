@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-import { Component, ViewChild, TemplateRef, ContentChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { DatagridComponent, GridDataFetchResult, GridState, GridSelectionType } from './datagrid.component';
 import { GridColumn, GridColumnHideable } from './interfaces/datagrid-column.interface';
 import { TestBed } from '@angular/core/testing';
@@ -13,6 +13,7 @@ import { WidgetFinder } from '../utils/test/widget-object';
 import { BoldTextRendererComponent } from './renderers/bold-text-renderer.component';
 import { ClrDatagridWidgetObject } from '../utils/test/datagrid/datagrid.wo';
 import { WithGridBoldRenderer } from './renderers/bold-text-renderer.wo';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export interface MockRecord {
     name: string;
@@ -63,7 +64,7 @@ interface HasFinderAndGrid {
 describe('DatagridComponent', () => {
     beforeEach(async function(this: HasFinderAndGrid): Promise<void> {
         await TestBed.configureTestingModule({
-            imports: [DatagridModule],
+            imports: [DatagridModule, BrowserAnimationsModule],
             declarations: [HostWithDatagridComponent],
         }).compileComponents();
 
@@ -135,76 +136,94 @@ describe('DatagridComponent', () => {
                 );
             });
 
-            it('has multi selection capabilities when set to multi', function(this: HasFinderAndGrid): void {
-                this.finder.hostComponent.selectionType = GridSelectionType.Multi;
-                this.finder.detectChanges();
-                expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.Multi);
-                this.clrGridWidget.selectRow(0);
-                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
-                this.clrGridWidget.selectRow(1);
-                expect(this.finder.hostComponent.getSelection()).toEqual(mockData);
+            describe('@Input() selectionType', () => {
+                it('has multi selection capabilities when set to multi selection', function(this: HasFinderAndGrid): void {
+                    this.finder.hostComponent.selectionType = GridSelectionType.Multi;
+                    this.finder.detectChanges();
+                    expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.Multi);
+                });
+
+                it('has single selection capabilities when set to single selection', function(this: HasFinderAndGrid): void {
+                    this.finder.hostComponent.selectionType = GridSelectionType.Single;
+                    this.finder.detectChanges();
+                    expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.Single);
+                });
+
+                it('has none selection capabilities when set to none', function(this: HasFinderAndGrid): void {
+                    this.finder.hostComponent.selectionType = GridSelectionType.None;
+                    this.finder.detectChanges();
+                    expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.None);
+                });
             });
 
-            it('has single selection capabilities when set to single', function(this: HasFinderAndGrid): void {
-                this.finder.hostComponent.selectionType = GridSelectionType.Single;
-                this.finder.detectChanges();
-                expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.Single);
-                this.clrGridWidget.selectRow(0);
-                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
-                this.clrGridWidget.selectRow(1);
-                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+            describe('getSelection()', () => {
+                it('emits multiple rows when set to multi selection', function(this: HasFinderAndGrid): void {
+                    this.finder.hostComponent.selectionType = GridSelectionType.Multi;
+                    this.finder.detectChanges();
+                    this.clrGridWidget.selectRow(0);
+                    expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
+                    this.clrGridWidget.selectRow(1);
+                    expect(this.finder.hostComponent.getSelection()).toEqual(mockData);
+                });
+
+                it('emits only one row when set to single selection', function(this: HasFinderAndGrid): void {
+                    this.finder.hostComponent.selectionType = GridSelectionType.Single;
+                    this.finder.detectChanges();
+                    this.clrGridWidget.selectRow(0);
+                    expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
+                    this.clrGridWidget.selectRow(1);
+                    expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+                });
             });
 
-            it('should unselect an item if the item is removed for single selection', function(this: HasFinderAndGrid): void {
-                this.finder.hostComponent.selectionType = GridSelectionType.Single;
-                this.finder.detectChanges();
-                this.clrGridWidget.selectRow(1);
-                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
-                this.finder.hostComponent.gridData = {
-                    items: [mockData[0]],
-                    totalItems: 2,
-                    pageSize: 2,
-                    page: 1,
-                };
-                this.finder.detectChanges();
-                expect(this.finder.hostComponent.getSelection()).toEqual([]);
-            });
+            describe('@Input() gridData', () => {
+                describe('when data is refreshed unselects a row if the row is removed', () => {
+                    it('in single selection', function(this: HasFinderAndGrid): void {
+                        this.finder.hostComponent.selectionType = GridSelectionType.Single;
+                        this.finder.detectChanges();
+                        this.clrGridWidget.selectRow(1);
+                        expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+                        this.finder.hostComponent.gridData = {
+                            items: [mockData[0]],
+                            totalItems: 2,
+                            pageSize: 2,
+                            page: 1,
+                        };
+                        this.finder.detectChanges();
+                        expect(this.finder.hostComponent.getSelection()).toEqual([]);
+                    });
 
-            it('should keep selected an item if the item is not removed on refresh', function(this: HasFinderAndGrid): void {
-                this.finder.hostComponent.selectionType = GridSelectionType.Single;
-                this.finder.detectChanges();
-                this.clrGridWidget.selectRow(1);
-                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
-                this.finder.hostComponent.gridData = {
-                    items: [mockData[1]],
-                    totalItems: 2,
-                    pageSize: 2,
-                    page: 1,
-                };
-                this.finder.detectChanges();
-                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
-            });
+                    it('in multi selection', function(this: HasFinderAndGrid): void {
+                        this.finder.hostComponent.selectionType = GridSelectionType.Multi;
+                        this.finder.detectChanges();
+                        this.clrGridWidget.selectRow(0);
+                        this.clrGridWidget.selectRow(1);
+                        expect(this.finder.hostComponent.getSelection()).toEqual(mockData);
+                        this.finder.hostComponent.gridData = {
+                            items: [mockData[0]],
+                            totalItems: 2,
+                            pageSize: 2,
+                            page: 1,
+                        };
+                        this.finder.detectChanges();
+                        expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
+                    });
+                });
 
-            it('should unselect an item if the item is removed for multi selection', function(this: HasFinderAndGrid): void {
-                this.finder.hostComponent.selectionType = GridSelectionType.Multi;
-                this.finder.detectChanges();
-                this.clrGridWidget.selectRow(0);
-                this.clrGridWidget.selectRow(1);
-                expect(this.finder.hostComponent.getSelection()).toEqual(mockData);
-                this.finder.hostComponent.gridData = {
-                    items: [mockData[0]],
-                    totalItems: 2,
-                    pageSize: 2,
-                    page: 1,
-                };
-                this.finder.detectChanges();
-                expect(this.finder.hostComponent.getSelection()).toEqual([mockData[0]]);
-            });
-
-            it('has none selection capabilities when set to none', function(this: HasFinderAndGrid): void {
-                this.finder.hostComponent.selectionType = GridSelectionType.None;
-                this.finder.detectChanges();
-                expect(this.clrGridWidget.getSelectionType()).toBe(GridSelectionType.None);
+                it('keeps selected an item if the item is not removed on refresh', function(this: HasFinderAndGrid): void {
+                    this.finder.hostComponent.selectionType = GridSelectionType.Single;
+                    this.finder.detectChanges();
+                    this.clrGridWidget.selectRow(1);
+                    expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+                    this.finder.hostComponent.gridData = {
+                        items: [mockData[1]],
+                        totalItems: 2,
+                        pageSize: 2,
+                        page: 1,
+                    };
+                    this.finder.detectChanges();
+                    expect(this.finder.hostComponent.getSelection()).toEqual([mockData[1]]);
+                });
             });
         });
 
@@ -291,33 +310,44 @@ describe('DatagridComponent', () => {
             });
         });
 
-        describe('Sorting functionality', () => {
+        describe('@Output() refresh', () => {
             beforeEach(function(this: HasFinderAndGrid): void {
                 this.finder.hostComponent.columns = [
                     {
                         displayName: 'Column',
+                        renderer: 'name',
+                        queryFieldName: 'a',
+                    },
+                    {
+                        displayName: 'other',
                         renderer: 'name',
                     },
                 ];
                 this.finder.detectChanges();
             });
 
-            it('should emit the proper column when its sorted', function(this: HasFinderAndGrid): void {
+            it('emits the column information when the column sorted', function(this: HasFinderAndGrid): void {
                 const refreshMethod = spyOn(this.finder.hostComponent, 'refresh');
                 this.clrGridWidget.sortColumn(0);
                 expect(refreshMethod).toHaveBeenCalledWith({
                     sortColumn: {
-                        name: 'Column',
+                        name: 'a',
                         reverse: false,
                     },
                 });
                 this.clrGridWidget.sortColumn(0);
                 expect(refreshMethod).toHaveBeenCalledWith({
                     sortColumn: {
-                        name: 'Column',
+                        name: 'a',
                         reverse: true,
                     },
                 });
+            });
+
+            it('does not sort a column without a queryFieldName', function(this: HasFinderAndGrid): void {
+                const refreshMethod = spyOn(this.finder.hostComponent, 'refresh');
+                this.clrGridWidget.sortColumn(1);
+                expect(refreshMethod).toHaveBeenCalledTimes(0);
             });
         });
     });
